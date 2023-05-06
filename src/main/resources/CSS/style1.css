@@ -1,0 +1,7 @@
+BorderPane {
+    -fx-font-family: "Segoe Print";
+}
+
+Button {;
+    -fx-background-color: blue;
+}
