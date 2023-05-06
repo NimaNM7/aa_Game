@@ -1,7 +1,8 @@
 BorderPane {
     -fx-font-family: "Segoe Print";
+    -fx-background-color: darkblue;
 }
 
 Button {;
-    -fx-background-color: blue;
+    -fx-background-color: orange;
 }

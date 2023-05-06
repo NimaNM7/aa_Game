@@ -18,8 +18,8 @@
             <TextField promptText="Username" maxWidth="300" fx:id="username"/>
             <PasswordField promptText="Password" maxWidth="300" fx:id="password"/>
             <Button text="Login" onMouseClicked="#login"/>
-            <Text text="You don't have an account?"/>
-            <Button text="Sign Up"/>
+            <Text text="You don't have an account?" fill="wheat"/>
+            <Button text="Sign Up" onMouseClicked="#signUpMenu"/>
         </VBox>
     </center>
 
