@@ -35,4 +35,8 @@ public class SignUpMenuController {
             alert.showAndWait();
         }
     }
+
+    public void goToLoginMenu(MouseEvent mouseEvent) throws Exception {
+        new LoginMenu().start(LoginMenu.stage);
+    }
 }

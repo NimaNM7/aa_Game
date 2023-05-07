@@ -9,6 +9,12 @@ import java.util.ArrayList;
 public class SignUpController {
     public static ArrayList<PasswordProblem> passwordProblems;
     public static SignUpMenuMessages signUp(String username, String password, String passwordConfirmation) {
+        if (username.length() == 0)
+            return SignUpMenuMessages.EMPTY_USERNAME;
+        if (password.length() == 0)
+            return SignUpMenuMessages.EMPTY_PASSWORD;
+        if (passwordConfirmation.length() == 0)
+            return SignUpMenuMessages.EMPTY_CONFIRMATION;
         if (!Validation.isValidUsername(username))
             return SignUpMenuMessages.INVALID_USERNAME;
         if (UserController.findUserWithUsername(username) != null)

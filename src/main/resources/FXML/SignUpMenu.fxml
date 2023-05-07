@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.text.Text?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="view.SignUpMenuController"
@@ -14,10 +15,12 @@
 
     <center>
         <VBox alignment="CENTER" spacing="10">
-            <TextField promptText="username" fx:id="username"/>
-            <PasswordField promptText="password" fx:id="password"/>
-            <PasswordField promptText="password confirmation" fx:id="passwordConfirmation"/>
+            <TextField promptText="username" fx:id="username" maxWidth="300"/>
+            <PasswordField promptText="password" fx:id="password" maxWidth="300"/>
+            <PasswordField promptText="password confirmation" fx:id="passwordConfirmation" maxWidth="300"/>
             <Button text="Sign Up" onMouseClicked="#signUp"/>
+            <Text text="You already have an account?" fill="wheat"/>
+            <Button text="Login" onMouseClicked="#goToLoginMenu"/>
         </VBox>
     </center>
 
