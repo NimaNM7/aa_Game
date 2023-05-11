@@ -1,10 +1,12 @@
 package view;
 
+import controller.MainController;
 import controller.SignUpController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import utils.PasswordProblem;
 import view.enums.SignUpMenuMessages;
@@ -16,7 +18,7 @@ public class SignUpMenuController {
     private PasswordField password;
     @FXML
     private PasswordField passwordConfirmation;
-    public void signUp(MouseEvent mouseEvent) {
+    public void signUp(MouseEvent mouseEvent) throws Exception {
         Alert alert;
         SignUpMenuMessages message = SignUpController.signUp(username.getText(), password.getText(),passwordConfirmation.getText());
         if (message.equals(SignUpMenuMessages.SIGN_UP_SUCCESSFUL)) {
@@ -25,6 +27,7 @@ public class SignUpMenuController {
             alert.setHeaderText("SignUp Successful!");
             alert.setHeaderText(message.getMessage());
             alert.showAndWait();
+            new MainMenu().start(LoginMenu.stage);
         } else {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");

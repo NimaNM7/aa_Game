@@ -20,6 +20,7 @@ public class LoginMenu extends Application {
         BorderPane borderPane = FXMLLoader.load(url);
         Scene scene = new Scene(borderPane);
         stage.setScene(scene);
+        stage.isResizable();
         stage.show();
     }
 }

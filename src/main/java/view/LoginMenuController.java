@@ -14,7 +14,7 @@ public class LoginMenuController {
     private TextField username;
     @FXML
     private PasswordField password;
-    public void login(MouseEvent mouseEvent) {
+    public void login(MouseEvent mouseEvent) throws Exception {
         LoginMenuMessages message = LoginController.login(username.getText(),password.getText());
         if (!message.equals(LoginMenuMessages.LOGIN_DONE)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -22,6 +22,8 @@ public class LoginMenuController {
             alert.setHeaderText("Login Error!");
             alert.setContentText(message.getMessage());
             alert.showAndWait();
+        } else {
+            new MainMenu().start(LoginMenu.stage);
         }
     }
 
