@@ -15,11 +15,13 @@
 
     <center>
         <VBox alignment="CENTER" spacing="10">
+            <Text text="Welcome to aa Game" styleClass="title1"/>
             <TextField promptText="Username" maxWidth="300" fx:id="username"/>
             <PasswordField promptText="Password" maxWidth="300" fx:id="password"/>
             <Button text="Login" onMouseClicked="#login"/>
             <Text text="You don't have an account?" fill="wheat"/>
             <Button text="Sign Up" onMouseClicked="#signUpMenu"/>
+            <Button text="play as guest" onMouseClicked="#playAsGuest"/>
         </VBox>
     </center>
 

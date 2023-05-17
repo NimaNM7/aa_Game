@@ -3,7 +3,8 @@ package controller;
 import model.User;
 import view.enums.LoginMenuMessages;
 
-public class LoginController {
+public class LoginMenuController {
+    private static int numberofGuestPlayers;
     public static LoginMenuMessages login(String username, String password) {
         User myUser;
         if (username.length() == 0) return LoginMenuMessages.EMPTY_USERNAME;
@@ -16,5 +17,10 @@ public class LoginController {
         }
         UserController.setCurrentUser(myUser);
         return LoginMenuMessages.LOGIN_DONE;
+    }
+
+
+    public static void playAsGuest() {
+        UserController.setCurrentUser(new User("guest" + numberofGuestPlayers, "11111",true));
     }
 }

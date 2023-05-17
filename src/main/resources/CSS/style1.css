@@ -6,3 +6,9 @@ BorderPane {
 Button {;
     -fx-background-color: orange;
 }
+
+.title1 {
+    -fx-font-weight: bold;
+    -fx-fill: #dc6913;
+    -fx-font-size: 40;
+}

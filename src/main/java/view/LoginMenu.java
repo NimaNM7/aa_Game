@@ -1,6 +1,6 @@
 package view;
 
-import controller.LoginController;
+import controller.LoginMenuController;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +37,7 @@ public class LoginMenu extends Application {
     }
 
     public void login(MouseEvent mouseEvent) throws Exception {
-        LoginMenuMessages message = LoginController.login(username.getText(),password.getText());
+        LoginMenuMessages message = LoginMenuController.login(username.getText(),password.getText());
         if (!message.equals(LoginMenuMessages.LOGIN_DONE)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -51,5 +51,10 @@ public class LoginMenu extends Application {
 
     public void signUpMenu(MouseEvent mouseEvent) throws Exception {
         new SignUpMenu().start(LoginMenu.stage);
+    }
+
+    public void playAsGuest(MouseEvent mouseEvent) throws Exception {
+        LoginMenuController.playAsGuest();
+        new MainMenu().start(LoginMenu.stage);
     }
 }

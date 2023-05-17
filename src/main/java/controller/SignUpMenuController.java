@@ -1,6 +1,5 @@
 package controller;
 
-import controller.database.Database;
 import model.User;
 import utils.PasswordProblem;
 import utils.Validation;
@@ -9,7 +8,7 @@ import view.enums.SignUpMenuMessages;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SignUpController {
+public class SignUpMenuController {
     public static ArrayList<PasswordProblem> passwordProblems;
     public static SignUpMenuMessages signUp(String username, String password, String passwordConfirmation) throws IOException {
         if (username.length() == 0)
@@ -29,9 +28,9 @@ public class SignUpController {
         if (!password.equals(passwordConfirmation))
             return SignUpMenuMessages.PASSWORD_CONFIRMATION_WRONG;
 
-        //TODO real signing up
-        Database.saveUser(new User(username, password));
-        System.out.println(Database.getAllUsers());
+        User signedUpUser = new User(username,password,false);
+        UserController.addUser(signedUpUser);
+        UserController.setCurrentUser(signedUpUser);
         return SignUpMenuMessages.SIGN_UP_SUCCESSFUL;
     }
 }

@@ -1,6 +1,6 @@
 package view;
 
-import controller.SignUpController;
+import controller.SignUpMenuController;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +34,7 @@ public class SignUpMenu extends Application {
 
     public void signUp(MouseEvent mouseEvent) throws Exception {
         Alert alert;
-        SignUpMenuMessages message = SignUpController.signUp(username.getText(), password.getText(),passwordConfirmation.getText());
+        SignUpMenuMessages message = SignUpMenuController.signUp(username.getText(), password.getText(),passwordConfirmation.getText());
         if (message.equals(SignUpMenuMessages.SIGN_UP_SUCCESSFUL)) {
             alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Congratulations!");
@@ -47,7 +47,7 @@ public class SignUpMenu extends Application {
             alert.setTitle("Error!");
             alert.setHeaderText("SignUp failed!");
             if (message.equals(SignUpMenuMessages.WEAK_PASSWORD))
-                alert.setContentText(PasswordProblem.showErrors(SignUpController.passwordProblems));
+                alert.setContentText(PasswordProblem.showErrors(SignUpMenuController.passwordProblems));
             else alert.setContentText(message.getMessage());
             alert.showAndWait();
         }
