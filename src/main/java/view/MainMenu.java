@@ -4,6 +4,7 @@ import controller.UserController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,5 +25,21 @@ public class MainMenu extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public void continueLastGame(MouseEvent mouseEvent) {
+        //TODO
+    }
+
+    public void startNewGame(MouseEvent mouseEvent) {
+        //TODO
+    }
+
+    public void goToProfileMenu(MouseEvent mouseEvent) throws Exception {
+        new ProfileMenu().start(LoginMenu.stage);
+    }
+
+    public void goToScoreBoard(MouseEvent mouseEvent) {
+
     }
 }

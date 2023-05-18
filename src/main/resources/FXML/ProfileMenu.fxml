@@ -8,15 +8,16 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.MainMenu"
+            fx:controller="view.ProfileMenu"
             stylesheets="@../CSS/style1.css"
             prefHeight="400.0" prefWidth="600.0">
+
     <center>
         <VBox alignment="CENTER" spacing="10">
-            <Button text="Continue Last Game" onMouseClicked="#continueLastGame"/>
-            <Button text="Start New Game" onMouseClicked="#startNewGame"/>
-            <Button text="Profile" onMouseClicked="#goToProfileMenu"/>
-            <Button text="ScoreBoard" onMouseClicked="#goToScoreBoard"/>
+            <Button text="change username and password" onMouseClicked="#changeUsernamePassword"/>
+            <Button text="change avatar" onMouseClicked="#changeAvatar"/>
+            <Button text="logout"/>
+            <Button text="delete account"/>
         </VBox>
     </center>
 
