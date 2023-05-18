@@ -41,10 +41,17 @@ public class ProfileMenu extends Application {
         borderPane = FXMLLoader.load(new URL(ProfileMenu.class.getResource("/FXML/ProfileMenu.fxml").toExternalForm()));
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Profile Menu");
         primaryStage.show();
     }
 
     public void changeUsernamePassword(MouseEvent mouseEvent) {
+        if (UserController.getCurrentUser().isGuest()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("You cant access this part!");
+            alert.showAndWait();
+            return;
+        }
         borderPane.getChildren().clear();
         VBox vBox = new VBox();
         vBox = (VBox) GraphicUtils.initializeFields(vBox,borderPane.getWidth()/2 - 150,100,"new username",
@@ -80,6 +87,12 @@ public class ProfileMenu extends Application {
     }
 
     public void changeAvatar(MouseEvent mouseEvent) {
+        if (UserController.getCurrentUser().isGuest()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("You cant access this part!");
+            alert.showAndWait();
+            return;
+        }
         borderPane.getChildren().clear();
         Avatar currentAvatar = UserController.getCurrentUser().getAvatar();
         currentAvatar.setXAndY(borderPane.getWidth()/2 - 25,25);
@@ -112,5 +125,17 @@ public class ProfileMenu extends Application {
 
     public void goBack(MouseEvent mouseEvent) throws Exception {
         new MainMenu().start(stage);
+    }
+
+    public void logout(MouseEvent mouseEvent) throws Exception {
+        UserController.setCurrentUser(null);
+        new LoginMenu().start(stage);
+    }
+
+    public void deleteAccount(MouseEvent mouseEvent) throws Exception {
+        if (!UserController.getCurrentUser().isGuest())
+            UserController.removeUser(UserController.getCurrentUser());
+        UserController.setCurrentUser(null);
+        new LoginMenu().start(stage);
     }
 }

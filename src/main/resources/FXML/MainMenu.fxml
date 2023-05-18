@@ -17,6 +17,7 @@
             <Button text="Start New Game" onMouseClicked="#startNewGame"/>
             <Button text="Profile" onMouseClicked="#goToProfileMenu"/>
             <Button text="ScoreBoard" onMouseClicked="#goToScoreBoard"/>
+            <Button text="settings" onMouseClicked="#goToSettings"/>
         </VBox>
     </center>
 

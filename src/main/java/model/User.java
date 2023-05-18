@@ -9,6 +9,8 @@ public class User {
     private final boolean isGuest;
     private int score;
     private String avatarPath;
+    private int totalTime;
+    private DifficultyLevel difficultyLevel;
 
     public User(String username, String password, boolean isGuest) {
         this.username = username;
@@ -56,5 +58,21 @@ public class User {
 
     public Avatar getAvatar() {
         return GraphicUtils.getAvatarWithAddress(avatarPath);
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public DifficultyLevel getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
     }
 }

@@ -18,12 +18,13 @@ public class MainMenu extends Application {
     public void start(Stage primaryStage) throws Exception {
         URL url = MainMenu.class.getResource("/FXML/MainMenu.fxml");
         BorderPane borderPane = FXMLLoader.load(url);
-        Text text = new Text(20,100,"Welcome to aa Game dear " + UserController.getCurrentUser().getUsername());
+        Text text = new Text(20,80,"Welcome to aa Game dear " + UserController.getCurrentUser().getUsername());
         text.setFill(Color.GRAY);
         text.setFont(new Font("Segoe Print",20));
         borderPane.getChildren().add(text);
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Main Menu");
         primaryStage.show();
     }
 
@@ -39,7 +40,11 @@ public class MainMenu extends Application {
         new ProfileMenu().start(LoginMenu.stage);
     }
 
-    public void goToScoreBoard(MouseEvent mouseEvent) {
+    public void goToScoreBoard(MouseEvent mouseEvent) throws Exception {
+        new ScoreBoard().start(LoginMenu.stage);
+    }
 
+    public void goToSettings(MouseEvent mouseEvent) throws Exception {
+        new SettingMenu().start(LoginMenu.stage);
     }
 }

@@ -15,9 +15,21 @@ public class UserController {
         Database.saveUsers();
     }
 
+    public static void removeUser(User user) {
+        Database.getAllUsers().remove(user);
+        Database.saveUsers();
+    }
+
     public static ArrayList<User> getAllUsersSorted() {
+        Database.loadUsers();
         ArrayList<User> allUsers = Database.getAllUsers();
-        Collections.sort(allUsers, Comparator.comparingInt(User::getScore));
+        Collections.sort(allUsers, (user1, user2) -> {
+            if (user1.getScore() == user2.getScore()) {
+                return user1.getTotalTime() - user2.getTotalTime();
+            } else {
+                return user2.getScore() - user1.getScore();
+            }
+        });
         return allUsers;
     }
 
