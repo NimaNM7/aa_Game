@@ -8,11 +8,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import model.Avatar;
 
 import java.util.List;
 
 public class GraphicUtils {
-    public static Image defaultAvatar = new Image(GraphicUtils.class.getResource("/images/defaultAvatar.jpg").toExternalForm());
+    public static Avatar getAvatarWithAddress(String address) {
+        return new Avatar(new Image(GraphicUtils.class.getResource(address).toExternalForm()));
+    }
 
     public static Pane initializeFields(Pane pane, double x, double y, String textFieldText, String passwordFieldText, String buttonText) {
         TextField textField = new TextField();

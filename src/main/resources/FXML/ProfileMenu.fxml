@@ -18,6 +18,7 @@
             <Button text="change avatar" onMouseClicked="#changeAvatar"/>
             <Button text="logout"/>
             <Button text="delete account"/>
+            <Button text="back" onMouseClicked="#goBack"/>
         </VBox>
     </center>
 

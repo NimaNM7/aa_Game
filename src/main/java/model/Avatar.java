@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Avatar extends Rectangle {
     private Image image;
+    private String path;
 
     public Avatar(Image image) {
         this.image = image;
@@ -17,5 +18,13 @@ public class Avatar extends Rectangle {
     public void setXAndY(double x, double y) {
         this.setTranslateX(x);
         this.setTranslateY(y);
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

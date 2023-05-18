@@ -8,14 +8,14 @@ public class User {
     private String password;
     private final boolean isGuest;
     private int score;
-    private Avatar avatar;
+    private String avatarPath;
 
     public User(String username, String password, boolean isGuest) {
         this.username = username;
         this.password = password;
         this.isGuest = isGuest;
         this.score = 0;
-        this.avatar = new Avatar(GraphicUtils.defaultAvatar);
+        this.avatarPath = "/images/defaultAvatar.jpg";
     }
 
     public String getUsername() {
@@ -46,11 +46,15 @@ public class User {
         this.score = score;
     }
 
-    public Avatar getAvatar() {
-        return avatar;
+    public String getAvatarPath() {
+        return avatarPath;
     }
 
-    public void setAvatar(Avatar avatar) {
-        this.avatar = avatar;
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+    public Avatar getAvatar() {
+        return GraphicUtils.getAvatarWithAddress(avatarPath);
     }
 }

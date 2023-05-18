@@ -2,6 +2,7 @@ package view;
 
 import controller.ProfileMenuController;
 import controller.UserController;
+import controller.database.Database;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -66,6 +67,7 @@ public class ProfileMenu extends Application {
                     finalVBox.getChildren().add(finalMessage);
                 } else {
                     try {
+                        Database.saveUsers();
                         new ProfileMenu().start(stage);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -87,12 +89,14 @@ public class ProfileMenu extends Application {
         HBox hBox = new HBox();
         for (int i = 0; i < 5; i++) {
             Avatar newAvatar = new Avatar(new Image(ProfileMenu.class.getResource("/images/avatar"+i+".jpg").toExternalForm()));
+            newAvatar.setPath("/images/avatar"+i+".jpg");
             newAvatar.setXAndY(50 + 20*i,80);
             hBox.getChildren().add(newAvatar);
             newAvatar.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    UserController.getCurrentUser().setAvatar(newAvatar);
+                    UserController.getCurrentUser().setAvatarPath(newAvatar.getPath());
+                    Database.saveUsers();
                     try {
                         new ProfileMenu().start(stage);
                     } catch (Exception e) {
@@ -104,5 +108,9 @@ public class ProfileMenu extends Application {
         vBox.getChildren().addAll(List.of(currentAvatar,text1,text2,hBox));
         borderPane.setCenter(vBox);
         stage.show();
+    }
+
+    public void goBack(MouseEvent mouseEvent) throws Exception {
+        new MainMenu().start(stage);
     }
 }
