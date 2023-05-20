@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -22,6 +23,8 @@ import model.DifficultyLevel;
 import model.MainCircle;
 import model.SmallCircle;
 import model.User;
+import utils.DefaultMaps;
+import utils.GraphicUtils;
 
 import java.net.URL;
 import java.util.Objects;
@@ -32,7 +35,7 @@ public class Game extends Application {
     private int countOfBalls;
     private  DifficultyLevel difficultyLevel;
     private boolean isMute;
-    static int counter;
+    private int numberOfMap;
 
     public Game() {
         this.player = UserController.getCurrentUser();
@@ -40,6 +43,7 @@ public class Game extends Application {
         this.countOfBalls = player.getPreferredCountOfBalls();
         this.difficultyLevel = player.getDifficultyLevel();
         this.isMute = player.isMutePreferred();
+        this.numberOfMap = player.getNumberOfMapPreffered();
         GameController.setGame(this);
     }
 
@@ -72,6 +76,11 @@ public class Game extends Application {
         URL url = Game.class.getResource("/FXML/game.fxml");
         Pane gamePane = FXMLLoader.load(url);
         this.gamePane = gamePane;
+        Label numberOfBallsLeft = new Label("number of balls left : " + countOfBalls);
+        numberOfBallsLeft.setTranslateY(50);
+        numberOfBallsLeft.setTranslateY(50);
+        gamePane.getChildren().add(numberOfBallsLeft);
+
         Button pauseButton = new Button("Pause");
         gamePane.getChildren().add(pauseButton);
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -83,7 +92,7 @@ public class Game extends Application {
 
         MainCircle mainCircle = new MainCircle();
         gamePane.getChildren().add(mainCircle);
-        counter = 0;
+        DefaultMaps.getDefaultMap(gamePane,numberOfMap);
 
         SmallCircle smallCircle = makeSmallCircle(gamePane,mainCircle);
 
@@ -104,7 +113,7 @@ public class Game extends Application {
                 String keyName = event.getCode().getName();
                 if (keyName.equals("Space")) {
                     GameController.shoot(gamePane,mainCircle);
-                    if (GameController.getBallsOnCircle().size() == countOfBalls) {
+                    if (GameController.getBallsOnCircle().size() == countOfBalls + 5) {
                         GameController.GameOver();
                     }
                 } else if (keyName.equals("Tab")) {

@@ -15,6 +15,7 @@ public class User {
     private DifficultyLevel difficultyLevel = DifficultyLevel.MEDIUM;
     private int preferredCountOfBalls = 20;
     private boolean isMutePreferred = false;
+    private int numberOfMapPreffered = 1;
 
     public User(String username, String password, boolean isGuest) {
         this.username = username;
@@ -102,5 +103,13 @@ public class User {
 
     public void setCurrentGame(Game currentGame) {
         this.currentGame = currentGame;
+    }
+
+    public int getNumberOfMapPreffered() {
+        return numberOfMapPreffered;
+    }
+
+    public void setNumberOfMapPreffered(int numberOfMapPreffered) {
+        this.numberOfMapPreffered = numberOfMapPreffered;
     }
 }

@@ -42,21 +42,47 @@ public class SettingMenu extends Application {
         CheckBox muteCheckbox = new CheckBox("Mute");
         muteCheckbox.setTextFill(Color.GRAY);
 
-        Label numberOfBallsLabel = new Label("number of balls:");
+        Label numberOfBallsLabel = new Label("number of balls in each phase:");
         numberOfBallsLabel.setTextFill(Color.GRAY);
         TextField numberOfBallsField = new TextField();
         numberOfBallsField.setMaxWidth(50);
+        Slider numberOfBalls = new Slider(10,20,0);
+        numberOfBalls.setShowTickLabels(true);
+        numberOfBalls.setMaxWidth(200);
+
+        Label numberOfMapLabel = new Label("number of map:");
+        numberOfMapLabel.setTextFill(Color.GRAY);
+
+        ToggleGroup numberOfMap = new ToggleGroup();
+        RadioButton map1 = new RadioButton("1");
+        map1.setToggleGroup(numberOfMap);
+        map1.setTextFill(Color.WHITE);
+
+        RadioButton map2 = new RadioButton("2");
+        map2.setToggleGroup(numberOfMap);
+        map2.setTextFill(Color.GRAY);
+
+        RadioButton map3 = new RadioButton("3");
+        map3.setToggleGroup(numberOfMap);
+        map3.setTextFill(Color.BLACK);
 
         Button submitButton = new Button("Submit");
         submitButton.setOnAction(event -> {
-            RadioButton selectedRadioButton = (RadioButton) difficultyGroup.getSelectedToggle();
             if (muteCheckbox.isSelected()) {
                 UserController.getCurrentUser().setMutePreferred(true);
             }
+            RadioButton selectedRadioButton = (RadioButton) difficultyGroup.getSelectedToggle();
             switch (selectedRadioButton.getText()) {
                 case "Easy" -> UserController.getCurrentUser().setDifficultyLevel(DifficultyLevel.EASY);
                 case "Medium" -> UserController.getCurrentUser().setDifficultyLevel(DifficultyLevel.MEDIUM);
                 case "Hard" -> UserController.getCurrentUser().setDifficultyLevel(DifficultyLevel.HARD);
+            }
+            UserController.getCurrentUser().setPreferredCountOfBalls((int) numberOfBalls.valueProperty().get());
+            RadioButton selectedRadioButton2 = (RadioButton) numberOfMap.getSelectedToggle();
+            switch (selectedRadioButton2.getText()) {
+                case "1" -> UserController.getCurrentUser().setNumberOfMapPreffered(1);
+                case "2" -> UserController.getCurrentUser().setNumberOfMapPreffered(2);
+                case "3" -> UserController.getCurrentUser().setNumberOfMapPreffered(3);
             }
             try {
                 new MainMenu().start(primaryStage);
@@ -68,7 +94,7 @@ public class SettingMenu extends Application {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
         layout.getChildren().addAll(difficultyLabel, easyRadioButton, mediumRadioButton, hardRadioButton, muteCheckbox,
-                numberOfBallsLabel, numberOfBallsField, submitButton, backButton);
+                numberOfBallsLabel, numberOfBalls, numberOfMapLabel, map1 , map2, map3, submitButton, backButton);
         borderPane.setCenter(layout);
         Scene scene = new Scene(borderPane);
 

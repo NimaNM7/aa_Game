@@ -48,7 +48,11 @@ public class GameController {
     }
 
     public static void rotateBall(Pane pane, SmallCircle smallCircle) {
-        Line line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() - 20 , 250, 420);
+        Line line;
+        if (smallCircle.getCenterX() == 250)
+            line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() - 20 , 250, 420);
+        else
+            line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() , 250, 350);
         line.setStroke(Color.BLACK);
         line.setStrokeWidth(5);
         pane.getChildren().add(line);
