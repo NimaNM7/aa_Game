@@ -26,13 +26,14 @@ public class ShootingAnimation extends Transition {
     @Override
     protected void interpolate(double frac) {
         double y = smallCircle.getCenterY() - 15;
-
         if (smallCircle.getDistanceFromCenter() < 180) {
-            smallCircle.placeOnCircle();
             GameController.rotateBall(pane,smallCircle);
+            if (GameController.isThereCrash(smallCircle)) {
+                GameController.GameOver();
+            }
+            GameController.getBallsOnCircle().add(smallCircle);
             stop();
         }
-
         smallCircle.setCenterY(y);
     }
 }

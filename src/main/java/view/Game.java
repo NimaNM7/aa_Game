@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class Game extends Application {
+    private Pane gamePane;
     private User player;
     private int countOfBalls;
     private  DifficultyLevel difficultyLevel;
@@ -39,12 +40,38 @@ public class Game extends Application {
         this.countOfBalls = player.getPreferredCountOfBalls();
         this.difficultyLevel = player.getDifficultyLevel();
         this.isMute = player.isMutePreferred();
+        GameController.setGame(this);
+    }
+
+    public User getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(User player) {
+        this.player = player;
+    }
+
+    public int getCountOfBalls() {
+        return countOfBalls;
+    }
+
+    public void setCountOfBalls(int countOfBalls) {
+        this.countOfBalls = countOfBalls;
+    }
+
+    public DifficultyLevel getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL url = Game.class.getResource("/FXML/game.fxml");
         Pane gamePane = FXMLLoader.load(url);
+        this.gamePane = gamePane;
         Button pauseButton = new Button("Pause");
         gamePane.getChildren().add(pauseButton);
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -54,7 +81,8 @@ public class Game extends Application {
             }
         });
 
-        MainCircle mainCircle = makeMainCircle(gamePane);
+        MainCircle mainCircle = new MainCircle();
+        gamePane.getChildren().add(mainCircle);
         counter = 0;
 
         SmallCircle smallCircle = makeSmallCircle(gamePane,mainCircle);
@@ -65,19 +93,6 @@ public class Game extends Application {
         primaryStage.show();
     }
 
-    private MainCircle makeMainCircle(Pane pane) {
-        MainCircle mainCircle = new MainCircle();
-        pane.getChildren().add(mainCircle);
-
-        RotateTransition transition = new RotateTransition(Duration.millis(4000));
-        transition.setNode(mainCircle);
-        transition.setFromAngle(0);
-        transition.setToAngle(360);
-        transition.setCycleCount(-1);
-        transition.setInterpolator(Interpolator.LINEAR);
-        transition.play();
-        return mainCircle;
-    }
 
     private SmallCircle makeSmallCircle(Pane gamePane, MainCircle mainCircle) {
         SmallCircle smallCircle = new SmallCircle();
@@ -89,6 +104,11 @@ public class Game extends Application {
                 String keyName = event.getCode().getName();
                 if (keyName.equals("Space")) {
                     GameController.shoot(gamePane,mainCircle);
+                    if (GameController.getBallsOnCircle().size() == countOfBalls) {
+                        GameController.GameOver();
+                    }
+                } else if (keyName.equals("Tab")) {
+                    //TODO freeze
                 }
             }
         });

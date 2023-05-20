@@ -8,13 +8,13 @@ import javafx.scene.shape.Circle;
 public class SmallCircle extends Circle {
 
     public SmallCircle() {
-        super(250,550,10);
+        super(250,720,10);
 //        this.setFill(new ImagePattern(new Image(MainCircle.class.getResource("/images/defaultAvatar.jpg").toExternalForm())));
         this.setFill(Color.BLACK);
     }
 
     public double getDistanceFromCenter() {
-        return Math.sqrt(Math.pow(250 - this.getCenterX(),2) + Math.pow(200 - this.getCenterY(),2));
+        return Math.sqrt(Math.pow(250 - this.getCenterX(),2) + Math.pow(350 - this.getCenterY(),2));
     }
 
     public void placeOnCircle() {

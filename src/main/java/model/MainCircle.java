@@ -10,8 +10,7 @@ import javafx.scene.text.Text;
 
 public class MainCircle extends Circle { ;
     public MainCircle() {
-        super(250,200,100);
-//        this.setFill(Color.BLACK);
-        this.setFill(new ImagePattern(new Image(MainCircle.class.getResource("/images/defaultAvatar.jpg").toExternalForm())));
+        super(250,350,70);
+        this.setFill(Color.BLACK);
     }
 }
