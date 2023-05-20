@@ -51,7 +51,7 @@ public class SettingMenu extends Application {
         submitButton.setOnAction(event -> {
             RadioButton selectedRadioButton = (RadioButton) difficultyGroup.getSelectedToggle();
             if (muteCheckbox.isSelected()) {
-                //TODO make the game mute
+                UserController.getCurrentUser().setMutePreferred(true);
             }
             switch (selectedRadioButton.getText()) {
                 case "Easy" -> UserController.getCurrentUser().setDifficultyLevel(DifficultyLevel.EASY);

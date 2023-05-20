@@ -2,6 +2,7 @@ package model;
 
 import javafx.scene.image.Image;
 import utils.GraphicUtils;
+import view.Game;
 
 public class User {
     private String username;
@@ -9,8 +10,11 @@ public class User {
     private final boolean isGuest;
     private int score;
     private String avatarPath;
+    private Game currentGame;
     private int totalTime;
-    private DifficultyLevel difficultyLevel;
+    private DifficultyLevel difficultyLevel = DifficultyLevel.MEDIUM;
+    private int preferredCountOfBalls = 20;
+    private boolean isMutePreferred = false;
 
     public User(String username, String password, boolean isGuest) {
         this.username = username;
@@ -74,5 +78,29 @@ public class User {
 
     public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
+    }
+
+    public int getPreferredCountOfBalls() {
+        return preferredCountOfBalls;
+    }
+
+    public void setPreferredCountOfBalls(int preferedCountOfBalls) {
+        this.preferredCountOfBalls = preferedCountOfBalls;
+    }
+
+    public boolean isMutePreferred() {
+        return isMutePreferred;
+    }
+
+    public void setMutePreferred(boolean mutePreferred) {
+        isMutePreferred = mutePreferred;
+    }
+
+    public Game getCurrentGame() {
+        return currentGame;
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
     }
 }

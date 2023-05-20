@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.User;
 
 import java.net.URL;
 
@@ -32,8 +33,9 @@ public class MainMenu extends Application {
         //TODO
     }
 
-    public void startNewGame(MouseEvent mouseEvent) {
-        //TODO
+    public void startNewGame(MouseEvent mouseEvent) throws Exception {
+        User currentUser = UserController.getCurrentUser();
+        new Game().start(LoginMenu.stage);
     }
 
     public void goToProfileMenu(MouseEvent mouseEvent) throws Exception {
