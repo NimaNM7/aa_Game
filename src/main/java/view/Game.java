@@ -68,18 +68,8 @@ public class Game extends Application {
     private MainCircle makeMainCircle(Pane pane) {
         MainCircle mainCircle = new MainCircle();
         pane.getChildren().add(mainCircle);
-//        mainCircle.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                String keyName = event.getCode().getName();
-//                System.out.println(keyName);
-//                if (keyName.equals("Space")) {
-//                    GameController.shoot(pane,mainCircle);
-//                }
-//            }
-//        });
 
-        RotateTransition transition = new RotateTransition(Duration.millis(700));
+        RotateTransition transition = new RotateTransition(Duration.millis(4000));
         transition.setNode(mainCircle);
         transition.setFromAngle(0);
         transition.setToAngle(360);
@@ -99,8 +89,6 @@ public class Game extends Application {
                 String keyName = event.getCode().getName();
                 if (keyName.equals("Space")) {
                     GameController.shoot(gamePane,mainCircle);
-                } if (keyName.equals("Right")) {
-                    smallCircle.setCenterX(smallCircle.getCenterX() + 5);
                 }
             }
         });

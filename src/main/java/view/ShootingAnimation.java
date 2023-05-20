@@ -1,5 +1,6 @@
 package view;
 
+import controller.GameController;
 import javafx.animation.RotateTransition;
 import javafx.animation.Transition;
 import javafx.scene.Group;
@@ -26,8 +27,9 @@ public class ShootingAnimation extends Transition {
     protected void interpolate(double frac) {
         double y = smallCircle.getCenterY() - 15;
 
-        if (smallCircle.getDistanceFromCenter() < 150) {
+        if (smallCircle.getDistanceFromCenter() < 180) {
             smallCircle.placeOnCircle();
+            GameController.rotateBall(pane,smallCircle);
             stop();
         }
 
