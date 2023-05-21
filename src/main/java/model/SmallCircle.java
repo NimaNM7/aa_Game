@@ -9,7 +9,6 @@ public class SmallCircle extends Circle {
 
     public SmallCircle() {
         super(250,720,10);
-//        this.setFill(new ImagePattern(new Image(MainCircle.class.getResource("/images/defaultAvatar.jpg").toExternalForm())));
         this.setFill(Color.BLACK);
     }
 
@@ -18,6 +17,6 @@ public class SmallCircle extends Circle {
     }
 
     public void placeOnCircle() {
-        setCenterY(Math.sqrt(32400 - Math.pow(this.getCenterX(),2)));
+        setCenterY(Math.sqrt(32400 - Math.pow(this.getCenterX() - 250,2)) + 350);
     }
 }

@@ -4,17 +4,22 @@ import controller.GameController;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Rotate;
 import model.SmallCircle;
+import view.RotateAnimation;
 
 public class DefaultMaps {
-    public static void getDefaultMap(Pane pane, int x) {
+    public static Pane getDefaultMap(Pane pane, int x) {
         switch (x) {
-            case 1 -> getMap1(pane);
-            case 2 -> getMap2(pane);
-            case 3 -> getMap3(pane);
+            case 1:
+                return getMap1(pane);
+            case 2:
+                return getMap2(pane);
+            case 3:
+                return getMap3(pane);
         }
+        return null;
     }
 
-    private static void getMap1(Pane pane) {
+    private static Pane getMap1(Pane pane) {
         SmallCircle circle;
         for (int i = 0; i < 5; i++) {
             circle = new SmallCircle();
@@ -22,11 +27,12 @@ public class DefaultMaps {
             circle.setCenterY(Math.pow(-1,i) * Math.sqrt(32400 - Math.pow(circle.getCenterX() - 250,2)) + 350);
             pane.getChildren().add(circle);
             GameController.getBallsOnCircle().add(circle);
-            GameController.rotateBall(pane,circle);
+            GameController.ballRotation(pane,circle);
         }
+        return pane;
     }
 
-    private static void getMap2(Pane pane) {
+    private static Pane getMap2(Pane pane) {
         SmallCircle circle;
         for (int i = 0; i < 5; i++) {
             circle = new SmallCircle();
@@ -34,11 +40,12 @@ public class DefaultMaps {
             circle.setCenterY(Math.pow(-1,i) * Math.sqrt(32400 - Math.pow(circle.getCenterX() - 250,2)) + 350);
             pane.getChildren().add(circle);
             GameController.getBallsOnCircle().add(circle);
-            GameController.rotateBall(pane,circle);
+//            GameController.rotateBall(pane,circle);
         }
+        return pane;
     }
 
-    private static void getMap3(Pane pane) {
+    private static Pane getMap3(Pane pane) {
         SmallCircle circle;
         for (int i = 0; i < 5; i++) {
             circle = new SmallCircle();
@@ -46,8 +53,9 @@ public class DefaultMaps {
             circle.setCenterY(Math.pow(-1,i) * Math.sqrt(32400 - Math.pow(circle.getCenterX() - 250,2)) + 350);
             pane.getChildren().add(circle);
             GameController.getBallsOnCircle().add(circle);
-            GameController.rotateBall(pane,circle);
+//            GameController.rotateBall(pane,circle);
         }
+        return pane;
     }
 
 }

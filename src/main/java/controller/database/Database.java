@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import view.Game;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,6 +29,17 @@ public class Database {
 
     public static void setAllUsers(ArrayList<User> allUsers) {
         Database.allUsers = allUsers;
+    }
+
+    public static void saveGame(Game game) {
+        try {
+            FileWriter fileWriter = new FileWriter(usersDatabasePath);
+            String json = new Gson().toJson(game);
+            fileWriter.write(json);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void saveUsers() {

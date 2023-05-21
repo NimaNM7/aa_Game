@@ -8,12 +8,12 @@ public enum DifficultyLevel {
     //TODO add details here if its better
     private final int timeOfCycle;
     private final int speedOfWind;
-    private final int freeseTime;
+    private final int freezeTime;
 
-    DifficultyLevel(int timeOfCycle, int speedOfWind, int freeseTime) {
+    DifficultyLevel(int timeOfCycle, int speedOfWind, int freezeTime) {
         this.timeOfCycle = timeOfCycle;
         this.speedOfWind = speedOfWind;
-        this.freeseTime = freeseTime;
+        this.freezeTime = freezeTime;
     }
 
     public int getTimeOfCycle() {
@@ -24,7 +24,7 @@ public enum DifficultyLevel {
         return speedOfWind;
     }
 
-    public int getFreeseTime() {
-        return freeseTime;
+    public int getfreezeTime() {
+        return freezeTime;
     }
 }
