@@ -1,25 +1,23 @@
 package controller;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.util.Duration;
 import model.MainCircle;
 import model.SmallCircle;
-import view.Game;
-import view.RotateAnimation;
-import view.ShootingAnimation;
+import view.*;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameController {
     private static Game game = new Game();
@@ -59,9 +57,9 @@ public class GameController {
     }
 
     public static void ballRotation(Pane pane, SmallCircle smallCircle) {
+        if (rotateAnimation == null) return;
         Rotate rotate = new Rotate((-1) * rotateAnimation.getRotate().getAngle(), 250,350);
         smallCircle.getTransforms().addAll(rotateAnimation.getRotate(),rotate);
-        ballsOnCircle.add(smallCircle);
         Line line;
         if (smallCircle.getCenterX() == 250)
             line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() , 250, 420);
@@ -74,13 +72,9 @@ public class GameController {
     }
 
 
-    public static void GameOver() {
-        System.out.println("game is over");
-    }
 
-    public static void changeRotate(Pane pane) {
 
-    }
+
 
     public static ProgressBar findProgressBarInPane(Pane pane) {
         for (Node child : pane.getChildren()) {
@@ -107,7 +101,8 @@ public class GameController {
     }
 
     public static void successfulShot(Pane pane, SmallCircle smallCircle) {
-        getBallsOnCircle().add(smallCircle);
+        if (!ballsOnCircle.contains(smallCircle))
+            ballsOnCircle.add(smallCircle);
         ProgressBar progressBar = GameController.findProgressBarInPane(pane);
         if (progressBar != null) {
             progressBar.setProgress(progressBar.getProgress() + 0.1);
@@ -125,11 +120,57 @@ public class GameController {
             return;
         }
         progressBar.setProgress(0);
-        //TODO real freeze
-        changeRotate(pane);
+        rotateAnimation.setAmount(0.5);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                rotateAnimation.setAmount(2);
+            }
+        }, 1000L * game.getPlayer().getDifficultyLevel().getfreezeTime());
     }
 
     public static void setRotateAnimation(RotateAnimation rotateAnimation) {
         GameController.rotateAnimation = rotateAnimation;
+    }
+
+    public static void reset() {
+        rotateAnimation = null;
+        ballsOnCircle.clear();
+        game = null;
+    }
+
+    public static void GameOverWin(Pane pane) {
+        pane.setStyle("-fx-background-color: green;");
+        Text youWon = new Text("You Won");
+        youWon.setFill(Color.BLACK);
+        youWon.setTranslateX(130);
+        youWon.setTranslateY(200);
+        youWon.setFont(new Font("Segoe Print",51));
+        pane.getChildren().add(youWon);
+        if (rotateAnimation != null)
+            rotateAnimation.stop();
+        reset();
+    }
+
+    public static void GameOverLost(Pane pane) throws Exception {
+        pane.setStyle("-fx-background-color: red;");
+        Text youLost = new Text("You Lost");
+        youLost.setFill(Color.BLACK);
+        youLost.setTranslateX(130);
+        youLost.setTranslateY(200);
+        youLost.setFont(new Font("Segoe Print",50));
+        pane.getChildren().add(youLost);
+        if (rotateAnimation != null)
+            rotateAnimation.stop();
+        reset();
+        System.out.println("game is over");
+    }
+
+    public static void pause(Pane gamePane) {
+        if (rotateAnimation.getAmount() == 0)
+            rotateAnimation.setAmount(2);
+        else
+            rotateAnimation.setAmount(0);
     }
 }

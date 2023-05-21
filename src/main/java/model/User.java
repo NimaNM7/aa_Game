@@ -10,7 +10,7 @@ public class User {
     private final boolean isGuest;
     private int score;
     private String avatarPath;
-    private Game currentGame;
+//    private Game currentGame;
     private int totalTime;
     private DifficultyLevel difficultyLevel = DifficultyLevel.MEDIUM;
     private int preferredCountOfBalls = 20;
@@ -97,13 +97,13 @@ public class User {
         isMutePreferred = mutePreferred;
     }
 
-    public Game getCurrentGame() {
-        return currentGame;
-    }
-
-    public void setCurrentGame(Game currentGame) {
-        this.currentGame = currentGame;
-    }
+//    public Game getCurrentGame() {
+//        return currentGame;
+//    }
+//
+//    public void setCurrentGame(Game currentGame) {
+//        this.currentGame = currentGame;
+//    }
 
     public int getNumberOfMapPreffered() {
         return numberOfMapPreffered;

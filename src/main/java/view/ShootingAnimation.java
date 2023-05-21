@@ -2,6 +2,7 @@ package view;
 
 import controller.GameController;
 import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -12,6 +13,9 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import model.MainCircle;
 import model.SmallCircle;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ShootingAnimation extends Transition {
     private Pane pane;
@@ -31,10 +35,19 @@ public class ShootingAnimation extends Transition {
             smallCircle.placeOnCircle();
             GameController.ballRotation(pane,smallCircle);
             if (GameController.isThereCrash(smallCircle)) {
-                GameController.GameOver();
+                try {
+                    GameController.GameOverLost(pane);
+                    new MainMenu().start(LoginMenu.stage);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                this.stop();
+                //smallCircle.focusTraversableProperty().set(false);
+            } else {
+                GameController.successfulShot(pane, smallCircle);
+                stop();
             }
-            GameController.successfulShot(pane,smallCircle);
-            stop();
+
         } else {
             smallCircle.setCenterY(y);
             //TODO changing x for phase 4

@@ -40,7 +40,7 @@ public class DefaultMaps {
             circle.setCenterY(Math.pow(-1,i) * Math.sqrt(32400 - Math.pow(circle.getCenterX() - 250,2)) + 350);
             pane.getChildren().add(circle);
             GameController.getBallsOnCircle().add(circle);
-//            GameController.rotateBall(pane,circle);
+            GameController.ballRotation(pane,circle);
         }
         return pane;
     }
@@ -53,7 +53,7 @@ public class DefaultMaps {
             circle.setCenterY(Math.pow(-1,i) * Math.sqrt(32400 - Math.pow(circle.getCenterX() - 250,2)) + 350);
             pane.getChildren().add(circle);
             GameController.getBallsOnCircle().add(circle);
-//            GameController.rotateBall(pane,circle);
+            GameController.ballRotation(pane,circle);
         }
         return pane;
     }

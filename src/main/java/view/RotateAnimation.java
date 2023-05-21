@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class RotateAnimation extends Transition {
     private ArrayList<SmallCircle> rotatingBalls;
     private Rotate rotate;
-    private int amount;
+    private double amount;
 
     public RotateAnimation(ArrayList<SmallCircle> rotatingBalls) {
         rotate = new Rotate(0,250,350);
@@ -28,11 +28,14 @@ public class RotateAnimation extends Transition {
     public void addBallToCircle(SmallCircle smallCircle) {
         smallCircle.getTransforms().add(rotate);
         rotatingBalls.add(smallCircle);
-        GameController.getBallsOnCircle().add(smallCircle);
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public double getAmount() {
+        return amount;
     }
 
     public  Rotate getRotate() {
@@ -43,4 +46,6 @@ public class RotateAnimation extends Transition {
     protected void interpolate(double frac) {
         rotate.setAngle(rotate.getAngle() + amount);
     }
+
+
 }

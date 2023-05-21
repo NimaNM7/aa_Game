@@ -43,7 +43,7 @@ public class Game extends Application {
 
     public Game() {
         this.player = UserController.getCurrentUser();
-        player.setCurrentGame(this);
+//        player.setCurrentGame(this);
         this.countOfBalls = player.getPreferredCountOfBalls();
         this.difficultyLevel = player.getDifficultyLevel();
         this.isMute = player.isMutePreferred();
@@ -106,8 +106,6 @@ public class Game extends Application {
         MainCircle mainCircle = new MainCircle();
         gamePane.getChildren().add(mainCircle);
 
-
-
         initializeGame(gamePane,GameController.getBallsOnCircle(),2,numberOfMap);
 
         SmallCircle smallCircle = makeSmallCircle(gamePane,mainCircle);
@@ -138,10 +136,18 @@ public class Game extends Application {
                 if (keyName.equals("Space")) {
                     GameController.shoot(gamePane,mainCircle);
                     if (GameController.getBallsOnCircle().size() == countOfBalls + 5) {
-                        GameController.GameOver();
+                        //TODO make it better
+                        GameController.GameOverWin(gamePane);
+                        try {
+                            start(LoginMenu.stage);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 } else if (keyName.equals("Tab")) {
                     GameController.freeze(gamePane);
+                } else if (keyName.equals("Backspace")) {
+                    GameController.pause(gamePane);
                 }
             }
         });

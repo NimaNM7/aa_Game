@@ -1,6 +1,7 @@
 package view;
 
 import controller.UserController;
+import controller.database.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -46,7 +47,7 @@ public class SettingMenu extends Application {
         numberOfBallsLabel.setTextFill(Color.GRAY);
         TextField numberOfBallsField = new TextField();
         numberOfBallsField.setMaxWidth(50);
-        Slider numberOfBalls = new Slider(10,20,0);
+        Slider numberOfBalls = new Slider(10,20,UserController.getCurrentUser().getPreferredCountOfBalls());
         numberOfBalls.setShowTickLabels(true);
         numberOfBalls.setMaxWidth(200);
 
@@ -84,6 +85,7 @@ public class SettingMenu extends Application {
                 case "2" -> UserController.getCurrentUser().setNumberOfMapPreffered(2);
                 case "3" -> UserController.getCurrentUser().setNumberOfMapPreffered(3);
             }
+            Database.saveUsers();
             try {
                 new MainMenu().start(primaryStage);
             } catch (Exception e) {
