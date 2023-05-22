@@ -9,9 +9,10 @@ public class User {
     private String password;
     private final boolean isGuest;
     private int score;
+    private int highscore;
     private String avatarPath;
-//    private Game currentGame;
     private int totalTime;
+    private int totalTimeInHighscore;
     private DifficultyLevel difficultyLevel = DifficultyLevel.MEDIUM;
     private int preferredCountOfBalls = 20;
     private boolean isMutePreferred = false;
@@ -97,19 +98,27 @@ public class User {
         isMutePreferred = mutePreferred;
     }
 
-//    public Game getCurrentGame() {
-//        return currentGame;
-//    }
-//
-//    public void setCurrentGame(Game currentGame) {
-//        this.currentGame = currentGame;
-//    }
-
     public int getNumberOfMapPreffered() {
         return numberOfMapPreffered;
     }
 
     public void setNumberOfMapPreffered(int numberOfMapPreffered) {
         this.numberOfMapPreffered = numberOfMapPreffered;
+    }
+
+    public int getHighscore() {
+        return highscore;
+    }
+
+    public void setHighscore(int highscore) {
+        this.highscore = highscore;
+    }
+
+    public int getTotalTimeInHighscore() {
+        return totalTimeInHighscore;
+    }
+
+    public void setTotalTimeInHighscore(int totalTimeInHighscore) {
+        this.totalTimeInHighscore = totalTimeInHighscore;
     }
 }

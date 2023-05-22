@@ -37,17 +37,14 @@ public class ShootingAnimation extends Transition {
             if (GameController.isThereCrash(smallCircle)) {
                 try {
                     GameController.GameOverLost(pane);
-                    new MainMenu().start(LoginMenu.stage);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                this.stop();
-                //smallCircle.focusTraversableProperty().set(false);
             } else {
                 GameController.successfulShot(pane, smallCircle);
-                stop();
             }
-
+            this.stop();
+            frac = 1;
         } else {
             smallCircle.setCenterY(y);
             //TODO changing x for phase 4

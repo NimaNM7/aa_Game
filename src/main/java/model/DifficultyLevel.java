@@ -1,30 +1,30 @@
 package model;
 
 public enum DifficultyLevel {
-    EASY(3000,1,7),
-    MEDIUM(2300,2,5),
-    HARD(1500,3,3),
+    EASY(1,1,7),
+    MEDIUM(2,2,5),
+    HARD(3,3,3),
     ;
     //TODO add details here if its better
-    private final int timeOfCycle;
+    private final double rotateSpeed;
     private final int speedOfWind;
     private final int freezeTime;
 
-    DifficultyLevel(int timeOfCycle, int speedOfWind, int freezeTime) {
-        this.timeOfCycle = timeOfCycle;
+    DifficultyLevel(double rotateSpeed, int speedOfWind, int freezeTime) {
+        this.rotateSpeed = rotateSpeed;
         this.speedOfWind = speedOfWind;
         this.freezeTime = freezeTime;
     }
 
-    public int getTimeOfCycle() {
-        return timeOfCycle;
+    public double getRotateSpeed() {
+        return rotateSpeed;
     }
 
     public int getSpeedOfWind() {
         return speedOfWind;
     }
 
-    public int getfreezeTime() {
+    public int getFreezeTime() {
         return freezeTime;
     }
 }

@@ -2,6 +2,7 @@ package view;
 
 import controller.LoginMenuController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -34,6 +35,7 @@ public class LoginMenu extends Application {
         stage.setScene(scene);
         stage.isResizable();
         stage.show();
+        stage.setOnCloseRequest(e -> System.exit(0));
     }
 
     public void login(MouseEvent mouseEvent) throws Exception {

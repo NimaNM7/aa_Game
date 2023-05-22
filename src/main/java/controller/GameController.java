@@ -1,8 +1,11 @@
 package controller;
 
+import controller.database.Database;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -16,14 +19,16 @@ import model.SmallCircle;
 import view.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameController {
     private static Game game = new Game();
-    public static int counter = 0;
     private static ArrayList<SmallCircle> ballsOnCircle = new ArrayList<>();
+    private static ArrayList<Line> linesOnCircle = new ArrayList<>();
     private static RotateAnimation rotateAnimation;
+    private static int currentPhase = 0;
 
     public static RotateAnimation getRotateAnimation() {
         return rotateAnimation;
@@ -41,19 +46,33 @@ public class GameController {
         return ballsOnCircle;
     }
 
+    public static ArrayList<Line> getLinesOnCircle() {
+        return linesOnCircle;
+    }
+
+    public static int getCurrentPhase() {
+        return currentPhase;
+    }
+
+    public static void setCurrentPhase(int currentPhase) {
+        GameController.currentPhase = currentPhase;
+    }
+
     public static boolean isThereCrash(SmallCircle smallCircle) {
         for (SmallCircle circle : ballsOnCircle) {
-            if (circle.getBoundsInParent().intersects(smallCircle.getBoundsInParent()))
+            if (circle.getBoundsInParent().intersects(smallCircle.getBoundsInParent())) {
                 return true;
+            }
         }
         return false;
     }
 
-    public static void shoot(Pane pane, MainCircle mainCircle) {
-        SmallCircle smallCircle = new SmallCircle();
-        pane.getChildren().add(smallCircle);
+    public static void shoot(Pane pane, SmallCircle smallCircle) {
         ShootingAnimation animation = new ShootingAnimation(pane,smallCircle);
         animation.play();
+        if (game.getCurrentCountOfBalls() > 0)
+            game.makeSmallCircle(pane);
+        else GameOverWin(pane);
     }
 
     public static void ballRotation(Pane pane, SmallCircle smallCircle) {
@@ -68,19 +87,15 @@ public class GameController {
         line.setStroke(Color.BLACK);
         line.setStrokeWidth(5);
         pane.getChildren().add(line);
+        linesOnCircle.add(line);
         line.getTransforms().addAll(rotateAnimation.getRotate(),rotate);
     }
 
-
-
-
-
-
-    public static ProgressBar findProgressBarInPane(Pane pane) {
+    public static ProgressBar findProgressBarInPane(Pane pane, String id) {
         for (Node child : pane.getChildren()) {
             if (child instanceof HBox) {
                 for (Node node : ((HBox) child).getChildren()) {
-                    if (node instanceof ProgressBar)
+                    if (node instanceof ProgressBar && node.getId().equals(id))
                         return (ProgressBar) node;
                 }
             }
@@ -88,11 +103,11 @@ public class GameController {
         return null;
     }
 
-    public static Label findBallsLabelInPane(Pane pane) {
+    public static Label findLabelInPane(Pane pane, String id) {
         for (Node child : pane.getChildren()) {
             if (child instanceof HBox) {
                 for (Node node : ((HBox) child).getChildren()) {
-                    if (node instanceof Label)
+                    if (node instanceof Label && node.getId().equals(id))
                         return (Label) node;
                 }
             }
@@ -101,33 +116,44 @@ public class GameController {
     }
 
     public static void successfulShot(Pane pane, SmallCircle smallCircle) {
-        if (!ballsOnCircle.contains(smallCircle))
-            ballsOnCircle.add(smallCircle);
-        ProgressBar progressBar = GameController.findProgressBarInPane(pane);
-        if (progressBar != null) {
-            progressBar.setProgress(progressBar.getProgress() + 0.1);
+        ballsOnCircle.add(smallCircle);
+        game.getPlayer().setScore(game.getPlayer().getScore() + 2 * currentPhase);
+        if (((game.getCurrentCountOfBalls() % (Math.ceil((float) game.getCountOfBalls()/4)) == 0
+                || game.getCurrentCountOfBalls() == 0) && GameController.getBallsOnCircle().size() > 6))
+            game.goToNextPhase(pane);
+        ProgressBar ballsForFreeze = GameController.findProgressBarInPane(pane,"ballsForFreeze");
+        if (ballsForFreeze != null) {
+            ballsForFreeze.setProgress(ballsForFreeze.getProgress() + 0.1);
         }
-        Label label = GameController.findBallsLabelInPane(pane);
-        if (label != null) {
-            label.setText("number of balls left: " + game.getCurrentCountOfBalls());
+        ProgressBar numberOfBallsLeft = GameController.findProgressBarInPane(pane,"numberOfBallsLeft");
+        if (numberOfBallsLeft != null) {
+            numberOfBallsLeft.setProgress(numberOfBallsLeft.getProgress() - ((float) 1/game.getCountOfBalls()));
+        }
+        Label score = GameController.findLabelInPane(pane,"score");
+        if (score != null) {
+            score.setText(" " + game.getPlayer().getScore());
         }
     }
 
 
     public static void freeze(Pane pane) {
-        ProgressBar progressBar = GameController.findProgressBarInPane(pane);
+        ProgressBar progressBar = GameController.findProgressBarInPane(pane,"ballsForFreeze");
         if (progressBar == null || progressBar.getProgress() <= 0.91) {
             return;
         }
         progressBar.setProgress(0);
-        rotateAnimation.setAmount(0.5);
+        if (rotateAnimation.getAmount() > 0)
+            rotateAnimation.setAmount(0.5);
+        else if (rotateAnimation.getAmount() < 0)
+            rotateAnimation.setAmount(-0.5);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                rotateAnimation.setAmount(2);
+                if (rotateAnimation != null)
+                    rotateAnimation.setAmount(2);
             }
-        }, 1000L * game.getPlayer().getDifficultyLevel().getfreezeTime());
+        }, 1000L * game.getPlayer().getDifficultyLevel().getFreezeTime());
     }
 
     public static void setRotateAnimation(RotateAnimation rotateAnimation) {
@@ -137,6 +163,7 @@ public class GameController {
     public static void reset() {
         rotateAnimation = null;
         ballsOnCircle.clear();
+        currentPhase = 1;
         game = null;
     }
 
@@ -145,12 +172,10 @@ public class GameController {
         Text youWon = new Text("You Won");
         youWon.setFill(Color.BLACK);
         youWon.setTranslateX(130);
-        youWon.setTranslateY(200);
+        youWon.setTranslateY(100);
         youWon.setFont(new Font("Segoe Print",51));
         pane.getChildren().add(youWon);
-        if (rotateAnimation != null)
-            rotateAnimation.stop();
-        reset();
+        gameOver(pane);
     }
 
     public static void GameOverLost(Pane pane) throws Exception {
@@ -158,13 +183,34 @@ public class GameController {
         Text youLost = new Text("You Lost");
         youLost.setFill(Color.BLACK);
         youLost.setTranslateX(130);
-        youLost.setTranslateY(200);
+        youLost.setTranslateY(100);
         youLost.setFont(new Font("Segoe Print",50));
         pane.getChildren().add(youLost);
+        gameOver(pane);
+    }
+
+    public static void gameOver(Pane pane) {
+        if (game.getPlayer().getScore() > game.getPlayer().getHighscore()) {
+            game.getPlayer().setHighscore(game.getPlayer().getScore());
+            game.getPlayer().setTotalTimeInHighscore(game.getPlayer().getTotalTime());
+        }
+        game.getPlayer().setScore(0);
+        game.getPlayer().setTotalTime(0);
         if (rotateAnimation != null)
             rotateAnimation.stop();
+        Database.saveUsers();
         reset();
-        System.out.println("game is over");
+
+        pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                try {
+                    new MainMenu().start(LoginMenu.stage);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     public static void pause(Pane gamePane) {
@@ -172,5 +218,16 @@ public class GameController {
             rotateAnimation.setAmount(2);
         else
             rotateAnimation.setAmount(0);
+    }
+
+    public static boolean isCrashInCurrentBalls(ArrayList<SmallCircle> smallCircles) {
+        for (SmallCircle circle1 : GameController.getBallsOnCircle()) {
+            for (SmallCircle circle2 : GameController.getBallsOnCircle()) {
+                if (!circle1.equals(circle2) && circle1.getBoundsInParent().intersects(circle2.getBoundsInParent())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

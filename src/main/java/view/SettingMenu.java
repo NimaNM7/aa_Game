@@ -3,6 +3,8 @@ package view;
 import controller.UserController;
 import controller.database.Database;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -68,6 +70,7 @@ public class SettingMenu extends Application {
         map3.setTextFill(Color.BLACK);
 
         Button submitButton = new Button("Submit");
+        Button backButton = new Button("back");
         submitButton.setOnAction(event -> {
             if (muteCheckbox.isSelected()) {
                 UserController.getCurrentUser().setMutePreferred(true);
@@ -92,7 +95,16 @@ public class SettingMenu extends Application {
                 throw new RuntimeException(e);
             }
         });
-        Button backButton = new Button("back");
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    new MainMenu().start(primaryStage);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
         layout.getChildren().addAll(difficultyLabel, easyRadioButton, mediumRadioButton, hardRadioButton, muteCheckbox,

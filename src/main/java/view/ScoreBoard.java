@@ -26,7 +26,7 @@ public class ScoreBoard extends Application {
         User user;
         for (int i = 0; i < UserController.getAllUsersSorted().size() && i < 10; i++) {
             user = UserController.getAllUsersSorted().get(i);
-            label = new Label((i+1) + "- username: " + user.getUsername() + " - score: " + user.getScore() + " - total time: " + user.getTotalTime());
+            label = new Label((i+1) + "- username: " + user.getUsername() + " - score: " + user.getHighscore() + " - total time: " + user.getTotalTimeInHighscore());
             if (i == 0)
                 label.setBackground(new Background(new BackgroundFill(Color.GOLD, CornerRadii.EMPTY, Insets.EMPTY)));
             else if (i == 1)

@@ -24,10 +24,10 @@ public class UserController {
         Database.loadUsers();
         ArrayList<User> allUsers = Database.getAllUsers();
         Collections.sort(allUsers, (user1, user2) -> {
-            if (user1.getScore() == user2.getScore()) {
-                return user1.getTotalTime() - user2.getTotalTime();
+            if (user1.getHighscore() == user2.getHighscore()) {
+                return user1.getTotalTimeInHighscore() - user2.getTotalTimeInHighscore();
             } else {
-                return user2.getScore() - user1.getScore();
+                return user2.getHighscore() - user1.getHighscore();
             }
         });
         return allUsers;
