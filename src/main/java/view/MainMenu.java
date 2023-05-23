@@ -1,5 +1,6 @@
 package view;
 
+import controller.GameController;
 import controller.UserController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ public class MainMenu extends Application {
         Text text = new Text(20,80,"Welcome to aa Game dear " + UserController.getCurrentUser().getUsername());
         text.setFill(Color.GRAY);
         text.setFont(new Font("Segoe Print",20));
+        borderPane.getChildren().get(0).setTranslateY(60);
         borderPane.getChildren().add(text);
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -34,7 +36,12 @@ public class MainMenu extends Application {
     }
 
     public void startNewGame(MouseEvent mouseEvent) throws Exception {
-        User currentUser = UserController.getCurrentUser();
+        GameController.setGameMultiPlayer(false);
+        new Game().start(LoginMenu.stage);
+    }
+
+    public void startMultiPlayerGame(MouseEvent mouseEvent) throws Exception {
+        GameController.setGameMultiPlayer(true);
         new Game().start(LoginMenu.stage);
     }
 
@@ -49,4 +56,5 @@ public class MainMenu extends Application {
     public void goToSettings(MouseEvent mouseEvent) throws Exception {
         new SettingMenu().start(LoginMenu.stage);
     }
+
 }

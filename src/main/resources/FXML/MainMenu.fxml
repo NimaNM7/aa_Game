@@ -15,6 +15,7 @@
         <VBox alignment="CENTER" spacing="10">
             <Button text="Continue Last Game" onMouseClicked="#continueLastGame"/>
             <Button text="Start New Game" onMouseClicked="#startNewGame"/>
+            <Button text="start MultiPlayer Game" onMouseClicked="#startMultiPlayerGame"/>
             <Button text="Profile" onMouseClicked="#goToProfileMenu"/>
             <Button text="ScoreBoard" onMouseClicked="#goToScoreBoard"/>
             <Button text="settings" onMouseClicked="#goToSettings"/>

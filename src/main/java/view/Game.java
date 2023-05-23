@@ -45,7 +45,7 @@ public class Game extends Application {
     private final int numberOfMap;
     private int score;
     private int totalTime;
-    private boolean isMultiPlayer = true;
+    private boolean isMultiPlayer;
 
     public Game() {
         this.player = UserController.getCurrentUser();
@@ -54,6 +54,7 @@ public class Game extends Application {
         this.isMute = player.isMutePreferred();
         this.numberOfMap = player.getNumberOfMapPreffered();
         GameController.setGame(this);
+        this.isMultiPlayer = GameController.isIsGameMultiPlayer();
     }
 
     public User getPlayer() {

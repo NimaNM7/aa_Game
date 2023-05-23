@@ -22,6 +22,7 @@ public class SmallCircle extends Circle {
         if (isFromSecondPlayer) {
             this.setCenterX(250);
             this.setCenterY(30);
+            this.setFill(Color.RED);
         }
     }
 

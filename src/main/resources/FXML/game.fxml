@@ -12,5 +12,4 @@
       fx:controller="view.Game"
       prefHeight="750.0" prefWidth="500.0">
 
-    <Text text="fuck"/>
 </Pane>

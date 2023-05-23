@@ -22,7 +22,8 @@ import view.*;
 import java.util.*;
 
 public class GameController {
-    private static Game game = new Game();
+    private static boolean isGameMultiPlayer;
+    private static Game game;
     private static ArrayList<SmallCircle> ballsOnCircle = new ArrayList<>();
     private static ArrayList<Line> linesOnCircle = new ArrayList<>();
     private static RotateAnimation rotateAnimation;
@@ -54,6 +55,14 @@ public class GameController {
 
     public static void setCurrentPhase(int currentPhase) {
         GameController.currentPhase = currentPhase;
+    }
+
+    public static void setGameMultiPlayer(boolean gameMultiPlayer) {
+        isGameMultiPlayer = gameMultiPlayer;
+    }
+
+    public static boolean isIsGameMultiPlayer() {
+        return isGameMultiPlayer;
     }
 
     public static boolean isThereCrash(SmallCircle smallCircle) {
