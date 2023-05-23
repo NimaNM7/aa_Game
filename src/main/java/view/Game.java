@@ -7,6 +7,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.DifficultyLevel;
@@ -30,6 +32,7 @@ import model.SmallCircle;
 import model.User;
 import utils.DefaultMaps;
 import utils.GraphicUtils;
+import utils.Utils;
 
 import java.net.URL;
 import java.util.*;
@@ -40,10 +43,11 @@ public class Game extends Application {
     private  DifficultyLevel difficultyLevel;
     private boolean isMute;
     private final int numberOfMap;
+    private int score;
+    private int totalTime;
 
     public Game() {
         this.player = UserController.getCurrentUser();
-//        player.setCurrentGame(this);
         this.countOfBalls = player.getPreferredCountOfBalls();
         this.difficultyLevel = player.getDifficultyLevel();
         this.isMute = player.isMutePreferred();
@@ -75,6 +79,22 @@ public class Game extends Application {
         this.difficultyLevel = difficultyLevel;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
+    }
+
     private void setPane(Pane gamePane) {
         HBox hbox = new HBox();
         hbox.setTranslateX(10);
@@ -92,12 +112,19 @@ public class Game extends Application {
         numberOfBallsLeft.setStyle("-fx-accent: #FF0000; -fx-background-color: #FFFFFF;");
 
         Label score = new Label(" " + 0);
+        score.setFont(new Font("Segoe Print",27));
         score.setTextFill(Color.GREEN);
         score.setId("score");
 
+        Label time = new Label();
+        time.setText("00:00");
+        time.setId("time");
+        time.setTextFill(Color.PURPLE);
+        time.setFont(new Font("Segoe Print",30));
+
         Button pauseButton = new Button("Pause");
 
-        hbox.getChildren().addAll(List.of(pauseButton,numberOfBallsLeft,ballsForFreeze,score));
+        hbox.getChildren().addAll(List.of(pauseButton,numberOfBallsLeft,ballsForFreeze,score,time));
         gamePane.getChildren().add(hbox);
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -112,14 +139,13 @@ public class Game extends Application {
     public void start(Stage primaryStage) throws Exception {
         URL url = Game.class.getResource("/FXML/game.fxml");
         Pane gamePane = FXMLLoader.load(url);
-
         setPane(gamePane);
 
         MainCircle mainCircle = new MainCircle();
         gamePane.getChildren().add(mainCircle);
 
         initializeGame(gamePane,GameController.getBallsOnCircle(),player.getDifficultyLevel().getRotateSpeed(),numberOfMap);
-
+        handleTime(gamePane);
         SmallCircle smallCircle = makeSmallCircle(gamePane);
 
         primaryStage.setScene(new Scene(gamePane));
@@ -133,6 +159,8 @@ public class Game extends Application {
         GameController.setRotateAnimation(rotateAnimation);
         GameController.setCurrentPhase(1);
         gamePane = DefaultMaps.getDefaultMap(gamePane,numberOfMap);
+        score = 0;
+        totalTime = 0;
         rotateAnimation.setAmount(amount);
         rotateAnimation.play();
     }
@@ -204,7 +232,8 @@ public class Game extends Application {
                         circle.setRadius(12);
                     else if (circle.getRadius() == 12)
                         circle.setRadius(10);
-                    //TODO what should i do for isCrashInCurrentBalls
+
+                    /* TODO this item is in the document and i coded it but dont want to be in my game
 //                    if (GameController.isCrashInCurrentBalls(GameController.getBallsOnCircle())) {
 //                        try {
 //                            GameController.GameOverLost(pane);
@@ -212,6 +241,7 @@ public class Game extends Application {
 //                            throw new RuntimeException(e);
 //                        }
 //                    }
+                       */
                 }
             }
         }, 0, 1000);
@@ -242,6 +272,44 @@ public class Game extends Application {
     private void goToPhase4(Pane pane) {
         GameController.setCurrentPhase(4);
         System.out.println("come to phase 4");
+    }
+
+    public void handleTime(Pane pane) {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (GameController.getCurrentPhase() == 0) {
+                    timer.cancel();
+                    return;
+                }
+                Label timeLabel = GameController.findLabelInPane(pane,"time");
+                if (Utils.getTimeFromLabel(Objects.requireNonNull(timeLabel)) == 10) {
+                    try {
+                        Platform.runLater(() -> {
+                            try {
+                                GameController.GameOverLost(pane);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                int seconds, minutes;
+                minutes = Integer.parseInt(timeLabel.getText().substring(0, 2));
+                seconds = Integer.parseInt(timeLabel.getText().substring(3, 5));
+                seconds = (seconds + 1) % 60;
+                if (seconds == 0) minutes++;
+                String formattedSecond = String.format("%02d",seconds);
+                String formattedMinute = String.format("%02d",minutes);
+                System.out.println(formattedMinute + ":" + formattedSecond);
+                Platform.runLater(() -> {
+                    timeLabel.setText(formattedMinute + ":" + formattedSecond);
+                });
+            }
+        }, 0, 1000);
     }
 }
 

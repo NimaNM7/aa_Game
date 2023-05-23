@@ -16,12 +16,10 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import model.MainCircle;
 import model.SmallCircle;
+import utils.Utils;
 import view.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class GameController {
     private static Game game = new Game();
@@ -88,6 +86,8 @@ public class GameController {
         line.setStrokeWidth(5);
         pane.getChildren().add(line);
         linesOnCircle.add(line);
+        smallCircle.setVisible(ballsOnCircle.get(0).isVisible());
+        line.setVisible(ballsOnCircle.get(0).isVisible());
         line.getTransforms().addAll(rotateAnimation.getRotate(),rotate);
     }
 
@@ -117,7 +117,7 @@ public class GameController {
 
     public static void successfulShot(Pane pane, SmallCircle smallCircle) {
         ballsOnCircle.add(smallCircle);
-        game.getPlayer().setScore(game.getPlayer().getScore() + 2 * currentPhase);
+        game.setScore(game.getScore() + 2 * currentPhase);
         if (((game.getCurrentCountOfBalls() % (Math.ceil((float) game.getCountOfBalls()/4)) == 0
                 || game.getCurrentCountOfBalls() == 0) && GameController.getBallsOnCircle().size() > 6))
             game.goToNextPhase(pane);
@@ -131,7 +131,7 @@ public class GameController {
         }
         Label score = GameController.findLabelInPane(pane,"score");
         if (score != null) {
-            score.setText(" " + game.getPlayer().getScore());
+            score.setText(" " + game.getScore());
         }
     }
 
@@ -163,7 +163,7 @@ public class GameController {
     public static void reset() {
         rotateAnimation = null;
         ballsOnCircle.clear();
-        currentPhase = 1;
+        currentPhase = 0;
         game = null;
     }
 
@@ -190,17 +190,22 @@ public class GameController {
     }
 
     public static void gameOver(Pane pane) {
-        if (game.getPlayer().getScore() > game.getPlayer().getHighscore()) {
-            game.getPlayer().setHighscore(game.getPlayer().getScore());
-            game.getPlayer().setTotalTimeInHighscore(game.getPlayer().getTotalTime());
+        System.out.println("do we arrive here?");
+        game.setTotalTime(Utils.getTimeFromLabel(Objects.requireNonNull(findLabelInPane(pane, "time"))));
+        if (game.getScore() > game.getPlayer().getHighscore()) {
+            game.getPlayer().setHighscore(game.getScore());
+            game.getPlayer().setTotalTimeInHighscore(game.getTotalTime());
+        } else if (game.getScore() == game.getPlayer().getHighscore() &&
+        game.getTotalTime() < game.getPlayer().getTotalTimeInHighscore()) {
+            game.getPlayer().setTotalTimeInHighscore(game.getTotalTime());
         }
-        game.getPlayer().setScore(0);
-        game.getPlayer().setTotalTime(0);
+        game.setScore(0);
+        game.setTotalTime(0);
         if (rotateAnimation != null)
             rotateAnimation.stop();
         Database.saveUsers();
         reset();
-
+        pane.requestFocus();
         pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {

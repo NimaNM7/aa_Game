@@ -8,10 +8,8 @@ public class User {
     private String username;
     private String password;
     private final boolean isGuest;
-    private int score;
     private int highscore;
     private String avatarPath;
-    private int totalTime;
     private int totalTimeInHighscore;
     private DifficultyLevel difficultyLevel = DifficultyLevel.MEDIUM;
     private int preferredCountOfBalls = 20;
@@ -22,7 +20,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.isGuest = isGuest;
-        this.score = 0;
         this.avatarPath = "/images/defaultAvatar.jpg";
     }
 
@@ -46,14 +43,6 @@ public class User {
         return isGuest;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public String getAvatarPath() {
         return avatarPath;
     }
@@ -64,14 +53,6 @@ public class User {
 
     public Avatar getAvatar() {
         return GraphicUtils.getAvatarWithAddress(avatarPath);
-    }
-
-    public int getTotalTime() {
-        return totalTime;
-    }
-
-    public void setTotalTime(int totalTime) {
-        this.totalTime = totalTime;
     }
 
     public DifficultyLevel getDifficultyLevel() {
