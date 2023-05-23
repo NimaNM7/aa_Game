@@ -199,8 +199,10 @@ public class Game extends Application {
             goToPhase3(pane);
         else if (GameController.getCurrentPhase() == 3)
             goToPhase4(pane);
-        else
+        else {
+            System.out.println("win from here (Game)");
             GameController.GameOverWin(pane);
+        }
     }
 
     private void goToPhase2(Pane pane) {
@@ -284,7 +286,7 @@ public class Game extends Application {
                     return;
                 }
                 Label timeLabel = GameController.findLabelInPane(pane,"time");
-                if (Utils.getTimeFromLabel(Objects.requireNonNull(timeLabel)) == 10) {
+                if (Utils.getTimeFromLabel(Objects.requireNonNull(timeLabel)) == 120) {
                     try {
                         Platform.runLater(() -> {
                             try {

@@ -68,9 +68,13 @@ public class GameController {
     public static void shoot(Pane pane, SmallCircle smallCircle) {
         ShootingAnimation animation = new ShootingAnimation(pane,smallCircle);
         animation.play();
+        System.out.println("now we have balls: " + game.getCurrentCountOfBalls());
         if (game.getCurrentCountOfBalls() > 0)
             game.makeSmallCircle(pane);
-        else GameOverWin(pane);
+//        else {
+//            System.out.println("win from here (GameController)");
+//            GameOverWin(pane);
+//        }
     }
 
     public static void ballRotation(Pane pane, SmallCircle smallCircle) {
@@ -119,8 +123,11 @@ public class GameController {
         ballsOnCircle.add(smallCircle);
         game.setScore(game.getScore() + 2 * currentPhase);
         if (((game.getCurrentCountOfBalls() % (Math.ceil((float) game.getCountOfBalls()/4)) == 0
-                || game.getCurrentCountOfBalls() == 0) && GameController.getBallsOnCircle().size() > 6))
+                || game.getCurrentCountOfBalls() == 0) && GameController.getBallsOnCircle().size() > 6)) {
             game.goToNextPhase(pane);
+            if (currentPhase == 0)
+                return;
+        }
         ProgressBar ballsForFreeze = GameController.findProgressBarInPane(pane,"ballsForFreeze");
         if (ballsForFreeze != null) {
             ballsForFreeze.setProgress(ballsForFreeze.getProgress() + 0.1);
@@ -190,7 +197,6 @@ public class GameController {
     }
 
     public static void gameOver(Pane pane) {
-        System.out.println("do we arrive here?");
         game.setTotalTime(Utils.getTimeFromLabel(Objects.requireNonNull(findLabelInPane(pane, "time"))));
         if (game.getScore() > game.getPlayer().getHighscore()) {
             game.getPlayer().setHighscore(game.getScore());
