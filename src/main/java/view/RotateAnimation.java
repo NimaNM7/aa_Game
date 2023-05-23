@@ -38,7 +38,7 @@ public class RotateAnimation extends Transition {
         return amount;
     }
 
-    public  Rotate getRotate() {
+    public Rotate getRotate() {
         return rotate;
     }
 

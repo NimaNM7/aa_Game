@@ -45,6 +45,7 @@ public class Game extends Application {
     private final int numberOfMap;
     private int score;
     private int totalTime;
+    private boolean isMultiPlayer = true;
 
     public Game() {
         this.player = UserController.getCurrentUser();
@@ -93,6 +94,14 @@ public class Game extends Application {
 
     public void setTotalTime(int totalTime) {
         this.totalTime = totalTime;
+    }
+
+    public boolean isMultiPlayer() {
+        return isMultiPlayer;
+    }
+
+    public void setMultiPlayer(boolean multiPlayer) {
+        isMultiPlayer = multiPlayer;
     }
 
     private void setPane(Pane gamePane) {
@@ -146,7 +155,7 @@ public class Game extends Application {
 
         initializeGame(gamePane,GameController.getBallsOnCircle(),player.getDifficultyLevel().getRotateSpeed(),numberOfMap);
         handleTime(gamePane);
-        SmallCircle smallCircle = makeSmallCircle(gamePane);
+        SmallCircle smallCircle = makeSmallCircle(gamePane,false);
 
         primaryStage.setScene(new Scene(gamePane));
         primaryStage.setTitle("Game");
@@ -166,24 +175,27 @@ public class Game extends Application {
     }
 
 
-    public SmallCircle makeSmallCircle(Pane gamePane) {
-        SmallCircle smallCircle = new SmallCircle();
+    public SmallCircle makeSmallCircle(Pane gamePane, boolean isFromSecondPlayer) {
+        SmallCircle smallCircle = new SmallCircle(isFromSecondPlayer);
         gamePane.getChildren().add(smallCircle);
         smallCircle.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 String keyName = event.getCode().getName();
                 if (keyName.equals("Space")) {
-                    System.out.println("im reporting you some stuff. first, the current phase is " + GameController.getCurrentPhase()
-                    + " and the size of array list of ball circles minus 5 is " + (GameController.getBallsOnCircle().size() - 5));
                     GameController.shoot(gamePane,smallCircle);
-                } else if (keyName.equals("Tab")) {
+                } else if (isMultiPlayer && keyName.equals("Enter")) {
+                    smallCircle.setFromSecondPlayer(true);
+                    GameController.shoot(gamePane,smallCircle);
+                    System.out.println("from enter a work is done");
+                }
+                else if (keyName.equals("Tab")) {
                     GameController.freeze(gamePane);
                 } else if (keyName.equals("Backspace")) {
                     GameController.pause(gamePane);
-                } else if (keyName.equals("Right")) {
+                } else if (keyName.equals("Right") && GameController.getCurrentPhase() == 4) {
                     smallCircle.setCenterX(smallCircle.getCenterX() + 5);
-                } else if (keyName.equals("Left")) {
+                } else if (keyName.equals("Left") && GameController.getCurrentPhase() == 4) {
                     smallCircle.setCenterX(smallCircle.getCenterX() - 5);
                 }
             }
@@ -216,7 +228,7 @@ public class Game extends Application {
                     timer.cancel();
                     return;
                 }
-                System.out.println("still running reverse");
+//                System.out.println("still running reverse");
                 GameController.getRotateAnimation().setAmount(-1 * GameController.getRotateAnimation().getAmount());
             }
         }, 0, 4000);
@@ -228,7 +240,7 @@ public class Game extends Application {
                     timer.cancel();
                     return;
                 }
-                System.out.println("still running size animation");
+//                System.out.println("still running size animation");
                 for (SmallCircle circle : GameController.getBallsOnCircle()) {
                     if (circle.getRadius() == 10)
                         circle.setRadius(12);

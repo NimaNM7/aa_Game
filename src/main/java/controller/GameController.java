@@ -70,7 +70,7 @@ public class GameController {
         animation.play();
         System.out.println("now we have balls: " + game.getCurrentCountOfBalls());
         if (game.getCurrentCountOfBalls() > 0)
-            game.makeSmallCircle(pane);
+            game.makeSmallCircle(pane,smallCircle.isFromSecondPlayer());
 //        else {
 //            System.out.println("win from here (GameController)");
 //            GameOverWin(pane);
@@ -81,9 +81,10 @@ public class GameController {
         if (rotateAnimation == null) return;
         Rotate rotate = new Rotate((-1) * rotateAnimation.getRotate().getAngle(), 250,350);
         smallCircle.getTransforms().addAll(rotateAnimation.getRotate(),rotate);
+
         Line line;
         if (smallCircle.getCenterX() == 250)
-            line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() , 250, 420);
+            line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() , 250, 350);
         else
             line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() , 250, 350);
         line.setStroke(Color.BLACK);
@@ -241,4 +242,5 @@ public class GameController {
         }
         return false;
     }
+
 }

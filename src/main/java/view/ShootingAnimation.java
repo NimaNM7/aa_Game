@@ -30,7 +30,12 @@ public class ShootingAnimation extends Transition {
 
     @Override
     protected void interpolate(double frac) {
-        double y = smallCircle.getCenterY() - 15;
+        double y;
+        if (smallCircle.isFromSecondPlayer())
+            y = smallCircle.getCenterY() + 15;
+        else
+            y = smallCircle.getCenterY() - 15;
+
         if (smallCircle.getDistanceFromCenter() < 180) {
             smallCircle.placeOnCircle();
             GameController.ballRotation(pane,smallCircle);

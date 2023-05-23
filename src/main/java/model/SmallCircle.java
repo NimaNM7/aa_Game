@@ -1,15 +1,36 @@
 package model;
 
+import controller.GameController;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import utils.Utils;
 
 public class SmallCircle extends Circle {
+    private boolean isFromSecondPlayer;
+//    private static Color[] colors ={Color.BLACK,Color.GRAY,Color.BLUE,Color.RED,Color.GREEN,Color.YELLOW,Color.PINK,Color.PURPLE};
 
     public SmallCircle() {
         super(250,720,10);
-        this.setFill(Color.BLACK);
+        setFill(Color.BLACK);
+        isFromSecondPlayer = false;
+    }
+
+    public SmallCircle(boolean isFromSecondPlayer) {
+        this();
+        if (isFromSecondPlayer) {
+            this.setCenterX(250);
+            this.setCenterY(30);
+        }
+    }
+
+    public boolean isFromSecondPlayer() {
+        return isFromSecondPlayer;
+    }
+
+    public void setFromSecondPlayer(boolean fromSecondPlayer) {
+        isFromSecondPlayer = fromSecondPlayer;
     }
 
     public double getDistanceFromCenter() {
@@ -17,6 +38,10 @@ public class SmallCircle extends Circle {
     }
 
     public void placeOnCircle() {
-        setCenterY(Math.sqrt(32400 - Math.pow(this.getCenterX() - 250,2)) + 350);
+        if (isFromSecondPlayer) {
+            setCenterY(-1 * Math.sqrt(32400 - Math.pow(this.getCenterX() - 250, 2)) + 350);
+        }
+        else
+            setCenterY(Math.sqrt(32400 - Math.pow(this.getCenterX() - 250,2)) + 350);
     }
 }
