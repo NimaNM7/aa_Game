@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -33,7 +34,7 @@ public class LoginMenu extends Application {
         BorderPane borderPane = FXMLLoader.load(url);
         Scene scene = new Scene(borderPane);
         stage.setScene(scene);
-        stage.isResizable();
+        stage.getIcons().add(new Image(LoginMenu.class.getResource("/images/icon.jpg").toString()));
         stage.show();
         stage.setOnCloseRequest(e -> System.exit(0));
     }
