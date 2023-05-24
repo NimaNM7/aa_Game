@@ -14,7 +14,10 @@ public class User {
     private DifficultyLevel difficultyLevel = DifficultyLevel.MEDIUM;
     private int preferredCountOfBalls = 20;
     private boolean isMutePreferred = false;
-    private int numberOfMapPreffered = 1;
+    private int numberOfMapPreferred = 1;
+    private String preferredShootingButton = "Space";
+    private String preferredFreezeButton = "Tab";
+    private String preferredSecondPlayerShootingButton = "Enter";
 
     public User(String username, String password, boolean isGuest) {
         this.username = username;
@@ -79,12 +82,12 @@ public class User {
         isMutePreferred = mutePreferred;
     }
 
-    public int getNumberOfMapPreffered() {
-        return numberOfMapPreffered;
+    public int getNumberOfMapPreferred() {
+        return numberOfMapPreferred;
     }
 
-    public void setNumberOfMapPreffered(int numberOfMapPreffered) {
-        this.numberOfMapPreffered = numberOfMapPreffered;
+    public void setNumberOfMapPreferred(int numberOfMapPreferred) {
+        this.numberOfMapPreferred = numberOfMapPreferred;
     }
 
     public int getHighscore() {
@@ -101,5 +104,29 @@ public class User {
 
     public void setTotalTimeInHighscore(int totalTimeInHighscore) {
         this.totalTimeInHighscore = totalTimeInHighscore;
+    }
+
+    public String getPreferredShootingButton() {
+        return preferredShootingButton;
+    }
+
+    public void setPreferredShootingButton(String preferredShootingButton) {
+        this.preferredShootingButton = preferredShootingButton;
+    }
+
+    public String getPreferredFreezeButton() {
+        return preferredFreezeButton;
+    }
+
+    public void setPreferredFreezeButton(String preferredFreezeButton) {
+        this.preferredFreezeButton = preferredFreezeButton;
+    }
+
+    public String getPreferredSecondPlayerShootingButton() {
+        return preferredSecondPlayerShootingButton;
+    }
+
+    public void setPreferredSecondPlayerShootingButton(String preferredSecondPlayerShootingButton) {
+        this.preferredSecondPlayerShootingButton = preferredSecondPlayerShootingButton;
     }
 }

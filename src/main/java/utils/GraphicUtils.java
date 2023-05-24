@@ -1,10 +1,15 @@
 package utils;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -42,5 +47,25 @@ public class GraphicUtils {
         text.setTranslateY(y);
         text.setFont(new Font("Segoe Print",size));
         return text;
+    }
+
+    public static TextField makeControlSettings() {
+        TextField choose = new TextField();
+        choose.setPromptText("click the button you want");
+        choose.setMaxWidth(300);
+        choose.setEditable(false);
+        choose.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                choose.setText(event.getCode().getName());
+            }
+        });
+        return choose;
+    }
+
+    public static void makeAllLabelsColored(Color color, Label... labels) {
+        for (Label label : labels) {
+            label.setTextFill(color);
+        }
     }
 }

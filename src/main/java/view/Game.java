@@ -52,7 +52,7 @@ public class Game extends Application {
         this.countOfBalls = player.getPreferredCountOfBalls();
         this.difficultyLevel = player.getDifficultyLevel();
         this.isMute = player.isMutePreferred();
-        this.numberOfMap = player.getNumberOfMapPreffered();
+        this.numberOfMap = player.getNumberOfMapPreferred();
         GameController.setGame(this);
         this.isMultiPlayer = GameController.isIsGameMultiPlayer();
     }
@@ -183,14 +183,14 @@ public class Game extends Application {
             @Override
             public void handle(KeyEvent event) {
                 String keyName = event.getCode().getName();
-                if (keyName.equals("Space")) {
+                if (keyName.equals(player.getPreferredShootingButton())) {
                     GameController.shoot(gamePane,smallCircle);
-                } else if (isMultiPlayer && keyName.equals("Enter")) {
+                } else if (isMultiPlayer && keyName.equals(player.getPreferredSecondPlayerShootingButton())) {
                     smallCircle.setFromSecondPlayer(true);
                     GameController.shoot(gamePane,smallCircle);
                     System.out.println("from enter a work is done");
                 }
-                else if (keyName.equals("Tab")) {
+                else if (keyName.equals(player.getPreferredFreezeButton())) {
                     GameController.freeze(gamePane);
                 } else if (keyName.equals("Backspace")) {
                     GameController.pause(gamePane);
