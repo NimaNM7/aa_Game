@@ -116,6 +116,7 @@ public class Game extends Application {
         ballsForFreeze.setId("ballsForFreeze");
         ballsForFreeze.setStyle("-fx-accent: #0000FF; -fx-background-color: #FFFFFF;");
 
+
         ProgressBar numberOfBallsLeft = new ProgressBar();
         numberOfBallsLeft.setProgress(1.0);
         numberOfBallsLeft.setId("numberOfBallsLeft");

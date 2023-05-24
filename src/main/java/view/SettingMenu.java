@@ -32,7 +32,7 @@ public class SettingMenu extends Application {
         CheckBox muteCheckbox = new CheckBox("Mute");
         muteCheckbox.setTextFill(Color.GRAY);
 
-        Label numberOfBallsLabel = new Label("number of balls in each phase:");
+        Label numberOfBallsLabel = new Label("number of balls:");
         ComboBox<Integer> chooseNumberOfBalls = new ComboBox<>();
         chooseNumberOfBalls.getItems().addAll(4,8,12,16,20,24,28,32,36,40);
 
@@ -71,11 +71,11 @@ public class SettingMenu extends Application {
                 UserController.getCurrentUser().setPreferredCountOfBalls(chooseNumberOfBalls.getSelectionModel().getSelectedItem());
             if (chooseNumberOfMap.getSelectionModel().getSelectedItem() != null)
                 UserController.getCurrentUser().setNumberOfMapPreferred(chooseNumberOfMap.getSelectionModel().getSelectedItem());
-            if (chooseShootingButton.getText() != null)
+            if (chooseShootingButton.getText().length() > 0)
                 UserController.getCurrentUser().setPreferredShootingButton(chooseShootingButton.getText());
-            if (chooseFreezeButton.getText() != null)
+            if (chooseFreezeButton.getText().length() > 0)
                 UserController.getCurrentUser().setPreferredFreezeButton(chooseFreezeButton.getText());
-            if (chooseSecondPlayerShootingButton.getText() != null)
+            if (chooseSecondPlayerShootingButton.getText().length() > 0)
                 UserController.getCurrentUser().setPreferredSecondPlayerShootingButton(chooseSecondPlayerShootingButton.getText());
 
             Database.saveUsers();

@@ -80,10 +80,6 @@ public class GameController {
         System.out.println("now we have balls: " + game.getCurrentCountOfBalls());
         if (game.getCurrentCountOfBalls() > 0)
             game.makeSmallCircle(pane,smallCircle.isFromSecondPlayer());
-//        else {
-//            System.out.println("win from here (GameController)");
-//            GameOverWin(pane);
-//        }
     }
 
     public static void ballRotation(Pane pane, SmallCircle smallCircle) {
@@ -145,6 +141,8 @@ public class GameController {
         ProgressBar numberOfBallsLeft = GameController.findProgressBarInPane(pane,"numberOfBallsLeft");
         if (numberOfBallsLeft != null) {
             numberOfBallsLeft.setProgress(numberOfBallsLeft.getProgress() - ((float) 1/game.getCountOfBalls()));
+            if (numberOfBallsLeft.getProgress() < 0.3) numberOfBallsLeft.setStyle("-fx-accent: #00FF00; -fx-background-color: #FFFFFF;");
+            else if (numberOfBallsLeft.getProgress() < 0.7) numberOfBallsLeft.setStyle("-fx-accent: #FFFF00; -fx-background-color: #FFFFFF;");
         }
         Label score = GameController.findLabelInPane(pane,"score");
         if (score != null) {
