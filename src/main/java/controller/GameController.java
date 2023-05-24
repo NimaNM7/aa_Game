@@ -9,6 +9,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
@@ -28,6 +30,20 @@ public class GameController {
     private static ArrayList<Line> linesOnCircle = new ArrayList<>();
     private static RotateAnimation rotateAnimation;
     private static int currentPhase = 0;
+    private static MediaPlayer mediaPlayer;
+    private static MediaPlayer dingPlayer;
+
+    public static void setMediaPlayer(MediaPlayer mediaPlayer) {
+        GameController.mediaPlayer = mediaPlayer;
+    }
+
+    public static void setDingPlayer(MediaPlayer dingPlayer) {
+        GameController.dingPlayer = dingPlayer;
+    }
+
+    public static MediaPlayer getDingPlayer() {
+        return dingPlayer;
+    }
 
     public static RotateAnimation getRotateAnimation() {
         return rotateAnimation;
@@ -137,12 +153,14 @@ public class GameController {
         if (game == null) return;
         ballsOnCircle.add(smallCircle);
         game.setScore(game.getScore() + (int) game.getDifficultyLevel().getRotateSpeed() * currentPhase);
-        if (((game.getCurrentCountOfBalls() % (Math.ceil((float) game.getCountOfBalls()/4)) == 0
+        if (((game.getCurrentCountOfBalls() % (game.getCountOfBalls()/4) == 0
                 || game.getCurrentCountOfBalls() == 0) && GameController.getBallsOnCircle().size() > 6)) {
             game.goToNextPhase(pane);
             if (currentPhase == 0)
                 return;
         }
+        dingPlayer.stop();
+        dingPlayer.play();
         ProgressBar ballsForFreeze = GameController.findProgressBarInPane(pane,"ballsForFreeze");
         if (ballsForFreeze != null) {
             ballsForFreeze.setProgress(ballsForFreeze.getProgress() + 0.1);
@@ -189,6 +207,7 @@ public class GameController {
         ballsOnCircle.clear();
         currentPhase = 0;
         game = null;
+        mediaPlayer.stop();
     }
 
     public static void GameOverWin(Pane pane) {

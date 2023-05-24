@@ -6,6 +6,7 @@ module aaGame {
     requires com.google.gson;
     requires org.junit.jupiter.api;
     requires org.mockito;
+    requires javafx.media;
 
     exports view;
     exports model;

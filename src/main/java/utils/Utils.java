@@ -1,6 +1,7 @@
 package utils;
 
 import javafx.scene.control.Label;
+import javafx.scene.media.Media;
 
 public class Utils {
     public static int getTimeFromLabel(Label label) {
@@ -9,4 +10,5 @@ public class Utils {
         int seconds = Integer.parseInt(labelText.substring(3,5));
         return minutes * 60 + seconds;
     }
+
 }
