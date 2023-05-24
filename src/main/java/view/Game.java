@@ -2,10 +2,6 @@ package view;
 
 import controller.GameController;
 import controller.UserController;
-import controller.database.Database;
-import javafx.animation.Interpolator;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -15,23 +11,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.DifficultyLevel;
 import model.MainCircle;
 import model.SmallCircle;
 import model.User;
 import utils.DefaultMaps;
-import utils.GraphicUtils;
 import utils.Utils;
 
 import java.net.URL;
@@ -46,6 +37,7 @@ public class Game extends Application {
     private int score;
     private int totalTime;
     private boolean isMultiPlayer;
+    private double windDegree = 0;
 
     public Game() {
         this.player = UserController.getCurrentUser();
@@ -105,6 +97,14 @@ public class Game extends Application {
         isMultiPlayer = multiPlayer;
     }
 
+    public double getWindDegree() {
+        return windDegree;
+    }
+
+    public void setWindDegree(double windDegree) {
+        this.windDegree = windDegree;
+    }
+
     private void setPane(Pane gamePane) {
         HBox hbox = new HBox();
         hbox.setTranslateX(10);
@@ -135,8 +135,15 @@ public class Game extends Application {
 
         Button pauseButton = new Button("Pause");
 
+        Label windLabel = new Label("degree of wind: " + windDegree);
+        windLabel.setTranslateY(50);
+        windLabel.setTranslateX(10);
+        windLabel.setFont(new Font("Segoe Print",20));
+        windLabel.setId("windLabel");
+
         hbox.getChildren().addAll(List.of(pauseButton,numberOfBallsLeft,ballsForFreeze,score,time));
-        gamePane.getChildren().add(hbox);
+
+        gamePane.getChildren().addAll(hbox,windLabel);
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -195,9 +202,9 @@ public class Game extends Application {
                     GameController.freeze(gamePane);
                 } else if (keyName.equals("Backspace")) {
                     GameController.pause(gamePane);
-                } else if (keyName.equals("Right") && GameController.getCurrentPhase() == 4) {
+                } else if (keyName.equals("Right") && GameController.getCurrentPhase() == 4 && smallCircle.getCenterX() < 480) {
                     smallCircle.setCenterX(smallCircle.getCenterX() + 5);
-                } else if (keyName.equals("Left") && GameController.getCurrentPhase() == 4) {
+                } else if (keyName.equals("Left") && GameController.getCurrentPhase() == 4 && smallCircle.getCenterX() > 20) {
                     smallCircle.setCenterX(smallCircle.getCenterX() - 5);
                 }
             }
@@ -288,6 +295,26 @@ public class Game extends Application {
     private void goToPhase4(Pane pane) {
         GameController.setCurrentPhase(4);
         System.out.println("come to phase 4");
+        Label windLabel = GameController.findWindLabelInPane(pane);
+        Random random = new Random();
+        int[] oneAndMinus = {-1,1};
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                double change;
+                if (GameController.getCurrentPhase() <= 3) {
+                    timer.cancel();
+                    return;
+                }
+                change = oneAndMinus[random.nextInt(0,2)] * difficultyLevel.getSpeedOfWind();
+                windDegree += change;
+                Platform.runLater(() -> {
+                    windLabel.setText("degree of wind: " + windDegree);
+                });
+            }
+        }, 0, 3000);
+
     }
 
     public void handleTime(Pane pane) {

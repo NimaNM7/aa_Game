@@ -30,13 +30,28 @@ public class ShootingAnimation extends Transition {
 
     @Override
     protected void interpolate(double frac) {
-        double y;
+        double x = 250 ,y;
+        if (GameController.getGame() != null)
+            x = smallCircle.getCenterX() + GameController.getGame().getWindDegree();
+
         if (smallCircle.isFromSecondPlayer())
             y = smallCircle.getCenterY() + 15;
         else
             y = smallCircle.getCenterY() - 15;
 
-        if (smallCircle.getDistanceFromCenter() < 180) {
+        if ( x < 20 || x > 480 ||
+                (!smallCircle.isFromSecondPlayer() && y > 750) || (smallCircle.isFromSecondPlayer() && y < 0)) {
+            System.out.println(x);
+            System.out.println(y);
+            System.out.println(smallCircle.isFromSecondPlayer());
+            System.out.println(smallCircle.getCenterX());
+            System.out.println(smallCircle.getCenterY());
+            try {
+                GameController.GameOverLost(pane);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (smallCircle.getDistanceFromCenter() < 180) {
             smallCircle.placeOnCircle();
             GameController.ballRotation(pane,smallCircle);
             if (GameController.isThereCrash(smallCircle)) {
@@ -52,7 +67,7 @@ public class ShootingAnimation extends Transition {
             frac = 1;
         } else {
             smallCircle.setCenterY(y);
-            //TODO changing x for phase 4
+            smallCircle.setCenterX(x);
         }
     }
 }

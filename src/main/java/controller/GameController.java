@@ -125,9 +125,18 @@ public class GameController {
         return null;
     }
 
+    public static Label findWindLabelInPane(Pane pane) {
+        for (Node child : pane.getChildren()) {
+            if (child instanceof Label && child.getId().equals("windLabel"))
+                return (Label) child;
+        }
+        return null;
+    }
+
     public static void successfulShot(Pane pane, SmallCircle smallCircle) {
+        if (game == null) return;
         ballsOnCircle.add(smallCircle);
-        game.setScore(game.getScore() + 2 * currentPhase);
+        game.setScore(game.getScore() + (int) game.getDifficultyLevel().getRotateSpeed() * currentPhase);
         if (((game.getCurrentCountOfBalls() % (Math.ceil((float) game.getCountOfBalls()/4)) == 0
                 || game.getCurrentCountOfBalls() == 0) && GameController.getBallsOnCircle().size() > 6)) {
             game.goToNextPhase(pane);
@@ -205,6 +214,7 @@ public class GameController {
     }
 
     public static void gameOver(Pane pane) {
+        if (game == null) return;
         game.setTotalTime(Utils.getTimeFromLabel(Objects.requireNonNull(findLabelInPane(pane, "time"))));
         if (game.getScore() > game.getPlayer().getHighscore()) {
             game.getPlayer().setHighscore(game.getScore());
