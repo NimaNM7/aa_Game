@@ -40,7 +40,7 @@ public class ShootingAnimation extends Transition {
             y = smallCircle.getCenterY() - 15;
 
         if ( x < 20 || x > 480 ||
-                (!smallCircle.isFromSecondPlayer() && y > 750) || (smallCircle.isFromSecondPlayer() && y < 0)) {
+                (!smallCircle.isFromSecondPlayer() && y < 0) || (smallCircle.isFromSecondPlayer() && y > 750)) {
             System.out.println(x);
             System.out.println(y);
             System.out.println(smallCircle.isFromSecondPlayer());
@@ -51,6 +51,8 @@ public class ShootingAnimation extends Transition {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            this.stop();
+            frac = 1;
         } else if (smallCircle.getDistanceFromCenter() < 180) {
             smallCircle.placeOnCircle();
             GameController.ballRotation(pane,smallCircle);
