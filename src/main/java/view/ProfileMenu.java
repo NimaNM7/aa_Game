@@ -22,12 +22,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Avatar;
 import utils.GraphicUtils;
 import utils.PasswordProblem;
 import view.enums.ProfileMenuMessages;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 
@@ -101,9 +103,8 @@ public class ProfileMenu extends Application {
         Text text2 = GraphicUtils.makeText("Choose your new avatar:",20,Color.YELLOW,borderPane.getWidth()/2 - 100,60);
         HBox hBox = new HBox();
         for (int i = 0; i < 5; i++) {
-            Avatar newAvatar = new Avatar(new Image(ProfileMenu.class.getResource("/images/avatar"+i+".jpg").toExternalForm()));
-            newAvatar.setPath("/images/avatar"+i+".jpg");
-            newAvatar.setXAndY(50 + 20*i,80);
+            Avatar newAvatar = GraphicUtils.getAllDefaultAvatars()[i];
+            newAvatar.setXAndY(50 + 20 * i, 80);
             hBox.getChildren().add(newAvatar);
             newAvatar.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -118,6 +119,28 @@ public class ProfileMenu extends Application {
                 }
             });
         }
+
+//        Button chooseButton = new Button("Choose Picture");
+//        chooseButton.setOnAction(event -> {
+//            FileChooser fileChooser = new FileChooser();
+//            fileChooser.setTitle("Choose a Picture");
+//            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+//            File selectedFile = fileChooser.showOpenDialog(stage);
+//
+//            if (selectedFile != null) {
+//                Image image = new Image(selectedFile.toURI().toString());
+//                Avatar newAvatar = new Avatar(image);
+//                String path = selectedFile.toURI().toString().substring(8);
+////                newAvatar.setPath("../../");
+//                UserController.getCurrentUser().setAvatarPath(newAvatar.getPath());
+//                System.out.println(newAvatar.getPath());
+//                try {
+//                    new ProfileMenu().start(stage);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
         vBox.getChildren().addAll(List.of(currentAvatar,text1,text2,hBox));
         borderPane.setCenter(vBox);
         stage.show();

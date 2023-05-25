@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 import utils.GraphicUtils;
 import view.Game;
 
+import java.util.Random;
+
 public class User {
     private String username;
     private String password;
@@ -20,10 +22,12 @@ public class User {
     private String preferredSecondPlayerShootingButton = "Enter";
 
     public User(String username, String password, boolean isGuest) {
+        Random random = new Random();
         this.username = username;
         this.password = password;
         this.isGuest = isGuest;
-        this.avatarPath = "/images/defaultAvatar.jpg";
+//        this.avatarPath = "/images/defaultAvatar.jpg";
+        this.avatarPath = GraphicUtils.getAllDefaultAvatars()[random.nextInt(0,5)].getPath();
     }
 
     public String getUsername() {

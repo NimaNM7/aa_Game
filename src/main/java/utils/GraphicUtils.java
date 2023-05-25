@@ -1,5 +1,7 @@
 package utils;
 
+import controller.UserController;
+import controller.database.Database;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -14,12 +17,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.Avatar;
+import view.ProfileMenu;
 
 import java.util.List;
 
 public class GraphicUtils {
     public static Avatar getAvatarWithAddress(String address) {
         return new Avatar(new Image(GraphicUtils.class.getResource(address).toExternalForm()));
+    }
+
+    public static Avatar[] getAllDefaultAvatars() {
+        Avatar[] allAvatars = new Avatar[5];
+        for (int i = 0; i < 5; i++) {
+            Avatar newAvatar = new Avatar(new Image(ProfileMenu.class.getResource("/images/avatar" + i + ".jpg").toExternalForm()));
+            newAvatar.setPath("/images/avatar" + i + ".jpg");
+            newAvatar.setXAndY(50 + 20 * i, 80);
+            allAvatars[i] = newAvatar;
+        }
+        return allAvatars;
     }
 
     public static Pane initializeFields(Pane pane, double x, double y, String textFieldText, String passwordFieldText, String buttonText) {
