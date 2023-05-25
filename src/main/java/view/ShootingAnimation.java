@@ -21,8 +21,9 @@ public class ShootingAnimation extends Transition {
     private Pane pane;
     private SmallCircle smallCircle;
 
-    public ShootingAnimation(Pane pane, SmallCircle smallCircle) {
-        this.pane = pane;
+    public ShootingAnimation(SmallCircle smallCircle) {
+        this.pane = GameController.getGame().gamePane;
+        System.out.println("ALL4 " + smallCircle.getCenterY());
         this.smallCircle = smallCircle;
         this.setCycleDuration(Duration.millis(1000));
         this.setCycleCount(-1);
@@ -36,18 +37,16 @@ public class ShootingAnimation extends Transition {
 
         if (smallCircle.isFromSecondPlayer())
             y = smallCircle.getCenterY() + 15;
+
         else
             y = smallCircle.getCenterY() - 15;
 
         if ( x < 20 || x > 480 ||
                 (!smallCircle.isFromSecondPlayer() && y < 0) || (smallCircle.isFromSecondPlayer() && y > 750)) {
-            System.out.println(x);
-            System.out.println(y);
             System.out.println(smallCircle.isFromSecondPlayer());
-            System.out.println(smallCircle.getCenterX());
-            System.out.println(smallCircle.getCenterY());
+
             try {
-                GameController.GameOverLost(pane);
+                GameController.GameOverLost();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -55,15 +54,15 @@ public class ShootingAnimation extends Transition {
             frac = 1;
         } else if (smallCircle.getDistanceFromCenter() < 180) {
             smallCircle.placeOnCircle();
-            GameController.ballRotation(pane,smallCircle);
+            GameController.ballRotation(smallCircle);
             if (GameController.isThereCrash(smallCircle)) {
                 try {
-                    GameController.GameOverLost(pane);
+                    GameController.GameOverLost();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             } else {
-                GameController.successfulShot(pane, smallCircle);
+                GameController.successfulShot(smallCircle);
             }
             this.stop();
             frac = 1;

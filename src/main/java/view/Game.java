@@ -32,6 +32,8 @@ import java.net.URL;
 import java.util.*;
 
 public class Game extends Application {
+    public Scene scene;
+    public Pane gamePane;
     private User player;
     private final int countOfBalls;
     private  DifficultyLevel difficultyLevel;
@@ -150,32 +152,41 @@ public class Game extends Application {
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("hello please write my code");
+                try {
+                    GameController.pause();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         pauseButton.setFocusTraversable(false);
     }
 
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL url = Game.class.getResource("/FXML/game.fxml");
-        Pane gamePane = FXMLLoader.load(url);
+        gamePane = FXMLLoader.load(url);
+        GameController.getGame().gamePane = this.gamePane;
         setPane(gamePane);
 
         MainCircle mainCircle = new MainCircle();
         gamePane.getChildren().add(mainCircle);
 
-        initializeGame(gamePane,GameController.getBallsOnCircle(),player.getDifficultyLevel().getRotateSpeed(),numberOfMap);
-        handleTime(gamePane);
-        SmallCircle smallCircle = makeSmallCircle(gamePane,false);
-
-        primaryStage.setScene(new Scene(gamePane));
+        System.out.println(gamePane == null);
+        System.out.println(GameController.getGame().gamePane == null);
+        initializeGame(GameController.getBallsOnCircle(),player.getDifficultyLevel().getRotateSpeed(),numberOfMap);
+        handleTime();
+        SmallCircle smallCircle = makeSmallCircle(false);
+        scene = new Scene(gamePane);
+        GameController.getGame().scene = this.scene;
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Game");
         smallCircle.requestFocus();
         primaryStage.show();
     }
 
-    private void initializeGame(Pane gamePane, ArrayList<SmallCircle> ballsOnCircle, double amount, int numberOfMap) {
+    private void initializeGame(ArrayList<SmallCircle> ballsOnCircle, double amount, int numberOfMap) {
         RotateAnimation rotateAnimation = new RotateAnimation(ballsOnCircle);
         GameController.setRotateAnimation(rotateAnimation);
         GameController.setCurrentPhase(1);
@@ -194,7 +205,7 @@ public class Game extends Application {
     }
 
 
-    public SmallCircle makeSmallCircle(Pane gamePane, boolean isFromSecondPlayer) {
+    public SmallCircle makeSmallCircle(boolean isFromSecondPlayer) {
         SmallCircle smallCircle = new SmallCircle(isFromSecondPlayer);
         gamePane.getChildren().add(smallCircle);
         smallCircle.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -202,16 +213,20 @@ public class Game extends Application {
             public void handle(KeyEvent event) {
                 String keyName = event.getCode().getName();
                 if (keyName.equals(player.getPreferredShootingButton())) {
-                    GameController.shoot(gamePane,smallCircle);
+                    smallCircle.setFromSecondPlayer(false);
+                    GameController.shoot(smallCircle);
                 } else if (isMultiPlayer && keyName.equals(player.getPreferredSecondPlayerShootingButton())) {
                     smallCircle.setFromSecondPlayer(true);
-                    GameController.shoot(gamePane,smallCircle);
-                    System.out.println("from enter a work is done");
+                    GameController.shoot(smallCircle);
                 }
                 else if (keyName.equals(player.getPreferredFreezeButton())) {
-                    GameController.freeze(gamePane);
+                    GameController.freeze();
                 } else if (keyName.equals("Backspace")) {
-                    GameController.pause(gamePane);
+                    try {
+                        GameController.pause();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 } else if (keyName.equals("Right") && GameController.getCurrentPhase() == 4 && smallCircle.getCenterX() < 480) {
                     smallCircle.setCenterX(smallCircle.getCenterX() + 5);
                 } else if (keyName.equals("Left") && GameController.getCurrentPhase() == 4 && smallCircle.getCenterX() > 20) {
@@ -223,20 +238,20 @@ public class Game extends Application {
         return smallCircle;
     }
 
-    public void goToNextPhase(Pane pane) {
+    public void goToNextPhase() {
         if (GameController.getCurrentPhase() == 1)
-            goToPhase2(pane);
+            goToPhase2();
         else if (GameController.getCurrentPhase() == 2)
-            goToPhase3(pane);
+            goToPhase3();
         else if (GameController.getCurrentPhase() == 3)
-            goToPhase4(pane);
+            goToPhase4();
         else {
             System.out.println("win from here (Game)");
-            GameController.GameOverWin(pane);
+            GameController.GameOverWin();
         }
     }
 
-    private void goToPhase2(Pane pane) {
+    private void goToPhase2() {
         GameController.setCurrentPhase(2);
         System.out.println("come to phase 2");
         Timer timer = new Timer();
@@ -280,7 +295,7 @@ public class Game extends Application {
         }, 0, 1000);
     }
 
-    private void goToPhase3(Pane pane) {
+    private void goToPhase3() {
         GameController.setCurrentPhase(3);
         System.out.println("come to phase 3");
         Timer timer = new Timer();
@@ -302,10 +317,10 @@ public class Game extends Application {
         }, 0, 1000);
     }
 
-    private void goToPhase4(Pane pane) {
+    private void goToPhase4() {
         GameController.setCurrentPhase(4);
         System.out.println("come to phase 4");
-        Label windLabel = GameController.findWindLabelInPane(pane);
+        Label windLabel = GameController.findWindLabelInPane();
         Random random = new Random();
         int[] oneAndMinus = {-1,1};
         Timer timer = new Timer();
@@ -327,7 +342,7 @@ public class Game extends Application {
 
     }
 
-    public void handleTime(Pane pane) {
+    public void handleTime() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -336,12 +351,12 @@ public class Game extends Application {
                     timer.cancel();
                     return;
                 }
-                Label timeLabel = GameController.findLabelInPane(pane,"time");
+                Label timeLabel = GameController.findLabelInPane("time");
                 if (Utils.getTimeFromLabel(Objects.requireNonNull(timeLabel)) == 120) {
                     try {
                         Platform.runLater(() -> {
                             try {
-                                GameController.GameOverLost(pane);
+                                GameController.GameOverLost();
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }

@@ -3,12 +3,14 @@ package controller;
 import controller.database.Database;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -77,6 +79,10 @@ public class GameController {
         isGameMultiPlayer = gameMultiPlayer;
     }
 
+    public static MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
     public static boolean isIsGameMultiPlayer() {
         return isGameMultiPlayer;
     }
@@ -90,15 +96,15 @@ public class GameController {
         return false;
     }
 
-    public static void shoot(Pane pane, SmallCircle smallCircle) {
-        ShootingAnimation animation = new ShootingAnimation(pane,smallCircle);
+    public static void shoot(SmallCircle smallCircle) {
+        ShootingAnimation animation = new ShootingAnimation(smallCircle);
         animation.play();
-        System.out.println("now we have balls: " + game.getCurrentCountOfBalls());
-        if (game.getCurrentCountOfBalls() > 0)
-            game.makeSmallCircle(pane,smallCircle.isFromSecondPlayer());
+        if (game.getCurrentCountOfBalls() > 0) {
+            game.makeSmallCircle(smallCircle.isFromSecondPlayer());
+        }
     }
 
-    public static void ballRotation(Pane pane, SmallCircle smallCircle) {
+    public static void ballRotation(SmallCircle smallCircle) {
         if (rotateAnimation == null) return;
         Rotate rotate = new Rotate((-1) * rotateAnimation.getRotate().getAngle(), 250,350);
         smallCircle.getTransforms().addAll(rotateAnimation.getRotate(),rotate);
@@ -110,15 +116,15 @@ public class GameController {
             line = new Line(smallCircle.getCenterX(), smallCircle.getCenterY() , 250, 350);
         line.setStroke(Color.BLACK);
         line.setStrokeWidth(5);
-        pane.getChildren().add(line);
+        game.gamePane.getChildren().add(line);
         linesOnCircle.add(line);
         smallCircle.setVisible(ballsOnCircle.get(0).isVisible());
         line.setVisible(ballsOnCircle.get(0).isVisible());
         line.getTransforms().addAll(rotateAnimation.getRotate(),rotate);
     }
 
-    public static ProgressBar findProgressBarInPane(Pane pane, String id) {
-        for (Node child : pane.getChildren()) {
+    public static ProgressBar findProgressBarInPane(String id) {
+        for (Node child : game.gamePane.getChildren()) {
             if (child instanceof HBox) {
                 for (Node node : ((HBox) child).getChildren()) {
                     if (node instanceof ProgressBar && node.getId().equals(id))
@@ -129,8 +135,8 @@ public class GameController {
         return null;
     }
 
-    public static Label findLabelInPane(Pane pane, String id) {
-        for (Node child : pane.getChildren()) {
+    public static Label findLabelInPane(String id) {
+        for (Node child : game.gamePane.getChildren()) {
             if (child instanceof HBox) {
                 for (Node node : ((HBox) child).getChildren()) {
                     if (node instanceof Label && node.getId().equals(id))
@@ -141,45 +147,46 @@ public class GameController {
         return null;
     }
 
-    public static Label findWindLabelInPane(Pane pane) {
-        for (Node child : pane.getChildren()) {
+    public static Label findWindLabelInPane() {
+        for (Node child : game.gamePane.getChildren()) {
             if (child instanceof Label && child.getId().equals("windLabel"))
                 return (Label) child;
         }
         return null;
     }
 
-    public static void successfulShot(Pane pane, SmallCircle smallCircle) {
+    public static void successfulShot(SmallCircle smallCircle) {
         if (game == null) return;
         ballsOnCircle.add(smallCircle);
         game.setScore(game.getScore() + (int) game.getDifficultyLevel().getRotateSpeed() * currentPhase);
         if (((game.getCurrentCountOfBalls() % (game.getCountOfBalls()/4) == 0
                 || game.getCurrentCountOfBalls() == 0) && GameController.getBallsOnCircle().size() > 6)) {
-            game.goToNextPhase(pane);
+            game.goToNextPhase();
             if (currentPhase == 0)
                 return;
         }
         dingPlayer.stop();
         dingPlayer.play();
-        ProgressBar ballsForFreeze = GameController.findProgressBarInPane(pane,"ballsForFreeze");
+        ProgressBar ballsForFreeze = GameController.findProgressBarInPane("ballsForFreeze");
         if (ballsForFreeze != null) {
-            ballsForFreeze.setProgress(ballsForFreeze.getProgress() + 0.1);
+            ballsForFreeze.setProgress(ballsForFreeze.getProgress() + (float) 2/game.getCountOfBalls());
         }
-        ProgressBar numberOfBallsLeft = GameController.findProgressBarInPane(pane,"numberOfBallsLeft");
+        ProgressBar numberOfBallsLeft = GameController.findProgressBarInPane("numberOfBallsLeft");
         if (numberOfBallsLeft != null) {
             numberOfBallsLeft.setProgress(numberOfBallsLeft.getProgress() - ((float) 1/game.getCountOfBalls()));
             if (numberOfBallsLeft.getProgress() < 0.3) numberOfBallsLeft.setStyle("-fx-accent: #00FF00; -fx-background-color: #FFFFFF;");
             else if (numberOfBallsLeft.getProgress() < 0.7) numberOfBallsLeft.setStyle("-fx-accent: #FFFF00; -fx-background-color: #FFFFFF;");
         }
-        Label score = GameController.findLabelInPane(pane,"score");
+        Label score = GameController.findLabelInPane("score");
         if (score != null) {
             score.setText(" " + game.getScore());
         }
+        System.out.println(game.gamePane.getChildren());
     }
 
 
-    public static void freeze(Pane pane) {
-        ProgressBar progressBar = GameController.findProgressBarInPane(pane,"ballsForFreeze");
+    public static void freeze() {
+        ProgressBar progressBar = GameController.findProgressBarInPane("ballsForFreeze");
         if (progressBar == null || progressBar.getProgress() <= 0.91) {
             return;
         }
@@ -203,6 +210,7 @@ public class GameController {
     }
 
     public static void reset() {
+        if (rotateAnimation != null) rotateAnimation.stop();
         rotateAnimation = null;
         ballsOnCircle.clear();
         currentPhase = 0;
@@ -210,7 +218,8 @@ public class GameController {
         mediaPlayer.stop();
     }
 
-    public static void GameOverWin(Pane pane) {
+    public static void GameOverWin() {
+        Pane pane = game.gamePane;
         pane.setStyle("-fx-background-color: green;");
         Text youWon = new Text("You Won");
         youWon.setFill(Color.BLACK);
@@ -218,10 +227,11 @@ public class GameController {
         youWon.setTranslateY(100);
         youWon.setFont(new Font("Segoe Print",51));
         pane.getChildren().add(youWon);
-        gameOver(pane);
+        gameOver();
     }
 
-    public static void GameOverLost(Pane pane) throws Exception {
+    public static void GameOverLost() throws Exception {
+        Pane pane = game.gamePane;
         pane.setStyle("-fx-background-color: red;");
         Text youLost = new Text("You Lost");
         youLost.setFill(Color.BLACK);
@@ -229,12 +239,13 @@ public class GameController {
         youLost.setTranslateY(100);
         youLost.setFont(new Font("Segoe Print",50));
         pane.getChildren().add(youLost);
-        gameOver(pane);
+        gameOver();
     }
 
-    public static void gameOver(Pane pane) {
+    public static void gameOver() {
         if (game == null) return;
-        game.setTotalTime(Utils.getTimeFromLabel(Objects.requireNonNull(findLabelInPane(pane, "time"))));
+        Pane pane = game.gamePane;
+        game.setTotalTime(Utils.getTimeFromLabel(Objects.requireNonNull(findLabelInPane("time"))));
         if (game.getScore() > game.getPlayer().getHighscore()) {
             game.getPlayer().setHighscore(game.getScore());
             game.getPlayer().setTotalTimeInHighscore(game.getTotalTime());
@@ -261,11 +272,11 @@ public class GameController {
         });
     }
 
-    public static void pause(Pane gamePane) {
-        if (rotateAnimation.getAmount() == 0)
-            rotateAnimation.setAmount(2);
-        else
-            rotateAnimation.setAmount(0);
+    public static void pause() throws Exception {
+        rotateAnimation.pause();
+        mediaPlayer.pause();
+        PauseMenu pauseMenu = new PauseMenu();
+        pauseMenu.start(LoginMenu.stage);
     }
 
     public static boolean isCrashInCurrentBalls(ArrayList<SmallCircle> smallCircles) {

@@ -22,6 +22,7 @@ public class SmallCircle extends Circle {
         if (isFromSecondPlayer) {
             this.setCenterX(250);
             this.setCenterY(30);
+            System.out.println("making a small circle which is for second player");
             this.setFill(Color.RED);
         }
     }
@@ -32,6 +33,13 @@ public class SmallCircle extends Circle {
 
     public void setFromSecondPlayer(boolean fromSecondPlayer) {
         isFromSecondPlayer = fromSecondPlayer;
+        if (isFromSecondPlayer) {
+            this.setCenterY(30);
+            this.setFill(Color.RED);
+        } else {
+            this.setCenterY(720);
+            this.setFill(Color.BLACK);
+        }
     }
 
     public double getDistanceFromCenter() {
