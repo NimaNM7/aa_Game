@@ -119,28 +119,6 @@ public class ProfileMenu extends Application {
                 }
             });
         }
-
-//        Button chooseButton = new Button("Choose Picture");
-//        chooseButton.setOnAction(event -> {
-//            FileChooser fileChooser = new FileChooser();
-//            fileChooser.setTitle("Choose a Picture");
-//            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-//            File selectedFile = fileChooser.showOpenDialog(stage);
-//
-//            if (selectedFile != null) {
-//                Image image = new Image(selectedFile.toURI().toString());
-//                Avatar newAvatar = new Avatar(image);
-//                String path = selectedFile.toURI().toString().substring(8);
-////                newAvatar.setPath("../../");
-//                UserController.getCurrentUser().setAvatarPath(newAvatar.getPath());
-//                System.out.println(newAvatar.getPath());
-//                try {
-//                    new ProfileMenu().start(stage);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        });
         vBox.getChildren().addAll(List.of(currentAvatar,text1,text2,hBox));
         borderPane.setCenter(vBox);
         stage.show();
