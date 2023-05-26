@@ -38,7 +38,8 @@ public class PauseMenu extends Application {
 
     public void resume(MouseEvent mouseEvent) throws Exception {
         GameController.getRotateAnimation().play();
-        GameController.getMediaPlayer().play();
+        if (!GameController.getGame().isMute())
+            GameController.getMediaPlayer().play();
         LoginMenu.stage.setScene(GameController.getGame().scene);
         LoginMenu.stage.show();
     }

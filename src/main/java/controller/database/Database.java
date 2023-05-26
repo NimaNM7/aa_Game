@@ -45,6 +45,10 @@ public class Database {
         try {
             System.out.println("im saving to json:");
             System.out.println(allUsers);
+            for (User user : allUsers) {
+                System.out.println("name: " + user.getUsername());
+                System.out.println("highScore: " + user.getHighscore());
+            }
             if (allUsers.size() == 0) {
                 setAllUsers(allUsersBackUp);
                 return;

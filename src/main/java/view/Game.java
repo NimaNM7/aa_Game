@@ -54,6 +54,14 @@ public class Game extends Application {
         this.isMultiPlayer = GameController.isIsGameMultiPlayer();
     }
 
+    public boolean isMute() {
+        return isMute;
+    }
+
+    public void setMute(boolean mute) {
+        isMute = mute;
+    }
+
     public User getPlayer() {
         return player;
     }
@@ -129,7 +137,7 @@ public class Game extends Application {
 
         Label score = new Label(" " + 0);
         score.setFont(new Font("Segoe Print",27));
-        score.setTextFill(Color.GREEN);
+        score.setTextFill(Color.BLUE);
         score.setId("score");
 
         Label time = new Label();
@@ -195,7 +203,8 @@ public class Game extends Application {
         Media dingSong = new Media(getClass().getResource("/SoundTracks/ding.mp3").toString());
         MediaPlayer dingPlayer = new MediaPlayer(dingSong);
         GameController.setDingPlayer(dingPlayer);
-        mediaPlayer.play();
+        if (!isMute)
+            mediaPlayer.play();
         gamePane = DefaultMaps.getDefaultMap(gamePane,numberOfMap);
         GameController.setMediaPlayer(mediaPlayer);
         score = 0;
@@ -274,7 +283,6 @@ public class Game extends Application {
                     timer.cancel();
                     return;
                 }
-//                System.out.println("still running size animation");
                 for (SmallCircle circle : GameController.getBallsOnCircle()) {
                     if (circle.getRadius() == 10)
                         circle.setRadius(12);

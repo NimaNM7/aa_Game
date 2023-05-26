@@ -57,6 +57,8 @@ public class SettingMenu extends Application {
         submitButton.setOnAction(event -> {
             if (muteCheckbox.isSelected()) {
                 UserController.getCurrentUser().setMutePreferred(true);
+            } else {
+                UserController.getCurrentUser().setMutePreferred(false);
             }
             if (chooseDifficulty.getSelectionModel().getSelectedItem() != null) {
                 switch (chooseDifficulty.getSelectionModel().getSelectedItem()) {

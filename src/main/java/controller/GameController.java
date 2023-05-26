@@ -166,7 +166,8 @@ public class GameController {
                 return;
         }
         dingPlayer.stop();
-        dingPlayer.play();
+        if (!game.isMute())
+            dingPlayer.play();
         ProgressBar ballsForFreeze = GameController.findProgressBarInPane("ballsForFreeze");
         if (ballsForFreeze != null) {
             ballsForFreeze.setProgress(ballsForFreeze.getProgress() + (float) 2/game.getCountOfBalls());
@@ -246,6 +247,9 @@ public class GameController {
         if (game == null) return;
         Pane pane = game.gamePane;
         game.setTotalTime(Utils.getTimeFromLabel(Objects.requireNonNull(findLabelInPane("time"))));
+        System.out.println("game is over and ");
+        System.out.println("this game's score: " + game.getScore());
+        System.out.println("player's highScore: " + game.getPlayer().getHighscore());
         if (game.getScore() > game.getPlayer().getHighscore()) {
             game.getPlayer().setHighscore(game.getScore());
             game.getPlayer().setTotalTimeInHighscore(game.getTotalTime());
@@ -253,6 +257,7 @@ public class GameController {
         game.getTotalTime() < game.getPlayer().getTotalTimeInHighscore()) {
             game.getPlayer().setTotalTimeInHighscore(game.getTotalTime());
         }
+        System.out.println("now it must be fixed, highScore is: " + game.getPlayer().getHighscore());
         game.setScore(0);
         game.setTotalTime(0);
         if (rotateAnimation != null)
