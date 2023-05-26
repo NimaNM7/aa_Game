@@ -247,6 +247,11 @@ public class GameController {
         if (game == null) return;
         Pane pane = game.gamePane;
         game.setTotalTime(Utils.getTimeFromLabel(Objects.requireNonNull(findLabelInPane("time"))));
+        Text scoreAndTime = new Text("score: " + game.getScore() + " time: " + game.getTotalTime());
+        scoreAndTime.setTranslateX(200);
+        scoreAndTime.setTranslateY(600);
+        scoreAndTime.setFont(new Font("Segoe Print",20));
+        pane.getChildren().add(scoreAndTime);
         System.out.println("game is over and ");
         System.out.println("this game's score: " + game.getScore());
         System.out.println("player's highScore: " + game.getPlayer().getHighscore());
