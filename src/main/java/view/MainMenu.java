@@ -34,10 +34,6 @@ public class MainMenu extends Application {
         primaryStage.show();
     }
 
-    public void continueLastGame(MouseEvent mouseEvent) {
-        //TODO
-    }
-
     public void startNewGame(MouseEvent mouseEvent) throws Exception {
         GameController.setGameMultiPlayer(false);
         new Game().start(LoginMenu.stage);

@@ -13,7 +13,6 @@
             prefHeight="400.0" prefWidth="600.0">
     <center>
         <VBox alignment="CENTER" spacing="10">
-            <Button text="Continue Last Game" onMouseClicked="#continueLastGame"/>
             <Button text="Start New Game" onMouseClicked="#startNewGame"/>
             <Button text="start MultiPlayer Game" onMouseClicked="#startMultiPlayerGame"/>
             <Button text="Profile" onMouseClicked="#goToProfileMenu"/>
